@@ -2,14 +2,89 @@
 {% block content%}
 	<h1>Compare GPUs</h1>
 
+	<h2 class="pt-2">SEARCH</h2>
 	<form>
 		<div class="form-group">
-			<label for="graphicsCard">Graphics Card Name</label>
+			<label for="graphicsCard">Graphics Card</label>
 			<input type="text" class="form-control" id="gpuNameSearch">
 			<small id="graphicsCardSearchHelp" class="form-text text-muted">Enter the name of a graphics card</small>
 		</div>
 
-		<button type="submit" class="btn btn-primary">Submit</button>
+		<div class="form-group pt-4">
+			<label for="chipsetSelect">Select a Chipset</label>
+			<select class="form-control" id='chipsetSelect'>
+				<option>NVIDIA</option>
+				<option>AMD</option>
+				<option>Both</option>
+			</select>
+			<small id="graphicsCardSearchHelp" class="form-text text-muted">Select a chipset brand (or both)</small>
+		</div>
+
+		<div class="pt-4">
+			<label>Select Brands</label>
+
+
+			<div class="form-check">
+			  <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+			  <label class="form-check-label" for="defaultCheck2">AMD</label>
+			</div>
+
+			<div class="form-check">
+			  <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+			  <label class="form-check-label" for="defaultCheck2">ASUS</label>
+			</div>
+
+			<div class="form-check">
+			  <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+			  <label class="form-check-label" for="defaultCheck2">EVGA</label>
+			</div>
+
+			<div class="form-check">
+			  <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+			  <label class="form-check-label" for="defaultCheck2">Gigabyte</label>
+			</div>
+
+			<div class="form-check">
+			  <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+			  <label class="form-check-label" for="defaultCheck2">MSI</label>
+			</div>
+
+			<div class="form-check">
+			  <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+			  <label class="form-check-label" for="defaultCheck1">NVIDIA</label>
+			</div>
+
+			<div class="form-check">
+			  <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+			  <label class="form-check-label" for="defaultCheck2">Power VR</label>
+			</div>
+
+
+			<div class="form-check">
+			  <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+			  <label class="form-check-label" for="defaultCheck2">Sapphire</label>
+			</div>
+
+			<div class="form-check">
+			  <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+			  <label class="form-check-label" for="defaultCheck2">Via</label>
+			</div>
+
+
+			<div class="form-check">
+			  <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+			  <label class="form-check-label" for="defaultCheck2">Zotac</label>
+			</div>
+			<small  class="form-text text-muted">Select all applicable brands</small>
+		</div>
+
+		<div class="form-group pt-4">
+			<label for="graphicsCard">Maximum price</label>
+			<input type="number" class="form-control" id="gpuNameSearch">
+			<small id="graphicsCardSearchHelp" class="form-text text-muted">Enter the Maximum price for cards you'd like to see</small>
+		</div>
+
+		<button type="submit" class="btn btn-primary">Go</button>
 	</form>
 
 	<table class="table table-striped">
