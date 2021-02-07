@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block content%}
+
+	<div class="content-section">
+	<h2>Add a graphics card</h2>
+    
+    <form action="{{ url_for('add_gpu') }}" method=post>
+        <div>
+            <!-- price Id -->
+            <p>
+                {{ form.priceId.label }} <br>
+                {{ form.priceId(placeholder='Enter Price Id') }}
+            </p>
+            <!-- memory Type  -->
+            <p>
+                {{ form.memoryType.label }} <br>
+                {{ form.memoryType(placeholder='Enter memory type') }}
+            </p>
+            <!-- Number of Cuda Cores -->
+            <p>
+                {{ form.numberOfCudaCores.label }}<br>
+                {{form.numberOfCudaCores(placeholder='Enter # of cuda cores')}}
+            </p>
+            <!-- Chipset Id -->
+            <p>
+                {{ form.chipsetId.label }}<br>
+                {{ form.chipsetId(placeholder='Enter chipset Id') }}
+            </p>
+            <!-- Submit button -->
+
+            <p>
+                {{ form.submit }}
+            </p>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

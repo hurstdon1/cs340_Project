@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content%}
+
+	<div class="content-section">
+	<h2>Add a brand</h2>
+    
+    <form action="{{ url_for('add_brand') }}" method=post>
+        <div>
+            <!-- brand name -->
+            <p>
+                {{ form.brandName.label }} <br>
+                {{ form.brandName(placeholder='Enter Brand Name') }}
+            </p>
+            <!-- product series  -->
+            <p>
+                {{ form.productSeries.label }} <br>
+                {{ form.productSeries(placeholder='Enter Product Series') }}
+            </p>
+            <!-- model -->
+            <p>
+                {{ form.model.label }}<br>
+                {{form.model(placeholder='Enter model name')}}
+            </p>
+
+            <!-- Submit button -->
+
+            <p>
+                {{ form.submit }}
+            </p>
+        </div>
+    </form>
+</div>
+
+
+{% endblock content %}
