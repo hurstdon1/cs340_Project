@@ -1,4 +1,63 @@
 {% extends "layout.html" %}
 {% block content%}
 	<h1>Compare GPUs</h1>
+
+	<form>
+		<div class="form-group">
+			<label for="graphicsCard">Graphics Card Name</label>
+			<input type="text" class="form-control" id="gpuNameSearch">
+			<small id="graphicsCardSearchHelp" class="form-text text-muted">Enter the name of a graphics card</small>
+		</div>
+
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</form>
+
+	<table class="table table-striped">
+	  <thead>
+	    <tr>
+	      <th scope="col">Graphics Card</th>
+	      <th scope="col">Chipset</th>
+	      <th scope="col">Brand</th>
+	      <th scope="col">Average Price</th>
+	      <th scope="col">Unigine Score</th>
+	      <th scope="col">Passmark Score</th>
+	      <th scope="col">Shadow of the Tomb Raider FPS</th>
+	      <th scope="col">GTA 5 FPS</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    <tr>
+	      <td>RTX 3080 FTW3 Gaming</td>
+	      <td>NVIDIA</td>
+	      <td>EVGA</td>
+	      <td>$982.99</td>
+	      <td>18,375</td>
+	      <td>24,062</td>
+	      <td>220</td>
+	      <td>160</td>
+	    </tr>
+	    <tr>
+	      <td>RTX 3080 Gaming OC</td>
+	      <td>NVIDIA</td>
+	      <td>Gigabyte</td>
+	      <td>$927.99</td>
+	      <td>18,255</td>
+	      <td>23,885</td>
+	      <td>219</td>
+	      <td>158</td>
+	    <tr>
+	      <td>RTX 3080 Founders Edition</td>
+	      <td>NVIDIA</td>
+	      <td>NVIDIA</td>
+	      <td>$699.99</td>
+	      <td>18,000</td>
+	      <td>24,000</td>
+	      <td>220</td>
+	      <td>162</td>
+	    </tr>
+	  </tbody>
+	</table>
+
+
+
 {% endblock content %}
