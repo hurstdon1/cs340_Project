@@ -1,15 +1,8 @@
 from flask import Flask, render_template, url_for
-from forms import ContactForm, gpuForm, brandForm, chipsetForm
+from forms import ContactForm, gpuForm, brandForm, chipsetForm, pricingForm, benchmarkForm, gpuBenchmarkForm, gpuBrandForm
 from flask import request
 from flask_wtf import FlaskForm
 from wtforms import TextField, BooleanField, TextAreaField, SubmitField
-
-# class ContactForm(FlaskForm):
-#     name = TextField("Name")
-#     email = TextField("Email")
-#     subject = TextField("Subject")
-#     message = TextAreaField("Message")
-#     submit = SubmitField("Send")
 
 app = Flask(__name__)
 
@@ -82,11 +75,65 @@ def add_chipset():
 
 @app.route("/add_pricing", methods=["GET","POST"])
 def add_pricing():
-	return render_template("add_pricing.html", title="Add Pricing")
+
+	form = pricingForm()
+
+	if request.method == 'POST':
+		averagePrice = request.form["averagePrice"]
+		res = pd.DataFrame({'averagePrice':averagePrice}, index=[0])
+		res.to_csv('./add_pricing.csv')
+		print("The data are saved")
+
+	else:
+		return render_template("add_pricing.html", form=form, title="Add Pricing")
 
 @app.route("/add_benchmarks", methods=["GET","POST"])
 def add_benchmarks():
-	return render_template("add_benchmarks.html", title="Add Benchmarks")
+
+	form = benchmarkForm()
+	
+	if request.method =='POST':
+		unigine = request.form["unigine"]
+		passmark = request.form["passmark"]
+		shadow = request.form["shadow"]
+		gta = request.form["gta"]
+		res=pd.DataFrame({'unigine':unigine, 'passmark':passmark, 'shadow':shadow, 'gta':gta}, index=[0])
+		res.to_csv('./add_benchmarks.csv')
+		print("The data are saved")
+
+	else:
+		return render_template("add_benchmarks.html", form=form, title="Add Benchmarks")
+
+@app.route("/add_gpu_benchmarks")
+def add_gpu_benchmarks():
+
+	form = gpuBenchmarkForm()
+
+	if request.method == 'POST':
+		gpuIdNumber = request.form["gpuIdNumber"]
+		benchmarkIdnumber = request.form["benchmarkIdNumber"]
+		res=pd.DataFrame({'gpuIdNumber':gpuIdNumber, 'benchmarkIdnumber':benchmarkIdnumber}, index=[0])
+		res.to_csv('./add_gpu_benchmarks.csv')
+		print("The data are saved")
+
+	else:
+		return render_template("add_gpu_benchmarks.html", form=form, title="Add GPU Benchmarks")
+
+@app.route("/add_gpu_brand")
+def add_gpu_brand():
+
+	form = gpuBrandForm()
+
+	if request.method == 'POST':
+		gpuIdNumber = request.form["gpuIdNumber"]
+		brandIdNumber = request.form["brandIdNumber"]
+		res=pd.DataFrame({'gpuIdNumber': gpuIdNumber, 'brandIdNumber':brandIdNumber}, index=[0])
+		res.to_csv('./add_gpu_brand.csv')
+		print("The data are saved")
+		
+	else:
+		return render_template("add_gpu_brand.html", form=form, title="Add GPU Brands")
+
 
 @app.route("/contact", methods=["GET","POST"])
 def contact():

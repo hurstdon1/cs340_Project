@@ -1,5 +1,38 @@
 {% extends "layout.html" %}
 {% block content%}
-<p>add gpu page</p>
+	
+	<div class="content-section">
+	<h2>Add Benchmark Scores</h2>
+    
+    <form action="{{ url_for('add_benchmarks') }}" method=post>
+        <div>
+            <!-- price Id -->
+            <p>
+                {{ form.unigine.label }} <br>
+                {{ form.unigine(placeholder='Enter score') }}
+            </p>
+            <!-- memory Type  -->
+            <p>
+                {{ form.passmark.label }} <br>
+                {{ form.passmark(placeholder='Enter score') }}
+            </p>
+            <!-- Number of Cuda Cores -->
+            <p>
+                {{ form.shadow.label }}<br>
+                {{form.shadow(placeholder='Enter avg FPS')}}
+            </p>
+            <!-- Chipset Id -->
+            <p>
+                {{ form.gta.label }}<br>
+                {{ form.gta(placeholder='Enter avg FPS') }}
+            </p>
+            <!-- Submit button -->
+
+            <p>
+                {{ form.submit }}
+            </p>
+        </div>
+    </form>
+</div>
 
 {% endblock content %}

@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import TextField, BooleanField, TextAreaField, SubmitField, IntegerField
+
 class ContactForm(FlaskForm):
     name = TextField("Name")
     email = TextField("Email")
@@ -27,7 +28,22 @@ class chipsetForm(FlaskForm):
 	submit = SubmitField("Submit")
 
 class pricingForm(FlaskForm):
-	pass
+	averagePrice = IntegerField("Average Price")
+	submit = SubmitField("Submit")
 
 class benchmarkForm(FlaskForm):
-	pass
+	unigine = IntegerField("Unigine score")
+	passmark = IntegerField("Passmark score")
+	shadow = IntegerField("Shadow of the Tomb Raider FPS")
+	gta = IntegerField("GTA 5 FPS")
+	submit = SubmitField("Submit")
+
+class gpuBenchmarkForm(FlaskForm):
+	gpuIdNumber = IntegerField("GPU ID Number")
+	benchmarkIdNumber = IntegerField("Bechmark ID Number")
+	submit = SubmitField("Submit")
+
+class gpuBrandForm(FlaskForm):
+	gpuIdNumber = IntegerField("GPU ID Number")
+	brandIdNumber = IntegerField("Brand ID Number")
+	submit = SubmitField("Submit")

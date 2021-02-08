@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content%}
+	
+	<div class="content-section">
+	<h2>Add a graphics card and brand relationship</h2>
+    
+    <form action="{{ url_for('add_gpu_brand') }}" method=post>
+        <div>
+            <!-- GPU Id -->
+            <p>
+                {{ form.gpuIdNumber.label }} <br>
+                {{ form.gpuIdNumber(placeholder='Enter GPU ID') }}
+            </p>
+            <!-- Brand ID -->
+            <p>
+                {{ form.brandIdNumber.label }} <br>
+                {{ form.brandIdNumber(placeholder='Enter Brand ID') }}
+            </p>
+            <!-- Submit button -->
+
+            <p>
+                {{ form.submit }}
+            </p>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

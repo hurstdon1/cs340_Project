@@ -1,32 +1,17 @@
 {% extends "layout.html" %}
 {% block content%}
-<p>add gpu page</p>
 
 	<div class="content-section">
-    <h3>Contact us</h3>
+    <h3>Add a price point</h3>
 
-    <form action="{{ url_for('contact') }}" method=post>
+    <form action="{{ url_for('add_pricing') }}" method=post>
         <div>
-            <!-- name forms -->
+            <!-- Average price -->
             <p>
-                {{ form.name.label }} <br>
-                {{ form.name(placeholder='Your name') }}
+                {{ form.averagePrice.label }} <br>
+                {{ form.averagePrice(placeholder='Enter a price') }}
             </p>
-            <!-- email forms -->
-            <p>
-                {{ form.email.label }} <br>
-                {{ form.email(placeholder='Your e-mail ...') }}
-            </p>
-            <!-- Subject of your request -->
-            <p>
-                {{ form.subject.label }}<br>
-                {{form.subject(placeholder='Your subject ...')}}
-            </p>
-            <!-- Content of your request -->
-            <p>
-                {{ form.message.label }}<br>
-                {{ form.message(placeholder='write your request ...') }}
-            </p>
+
             <!-- Submit button -->
 
             <p>
