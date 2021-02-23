@@ -3,6 +3,7 @@ from forms import ContactForm, gpuForm, brandForm, chipsetForm, pricingForm, ben
 from flask import request
 from flask_wtf import FlaskForm
 from wtforms import TextField, BooleanField, TextAreaField, SubmitField
+import os
 
 app = Flask(__name__)
 
@@ -134,6 +135,26 @@ def add_gpu_brand():
 	else:
 		return render_template("add_gpu_brand.html", form=form, title="Add GPU Brands")
 
+@app.route("/update_benchmarks", methods=["GET","POST"])
+def update_benchmarks():
+
+        form = benchmarkForm()
+
+        if request.method =='POST':
+                unigine = request.form["unigine"]
+                passmark = request.form["passmark"]
+                shadow = request.form["shadow"]
+                gta = request.form["gta"]
+                res=pd.DataFrame({'unigine':unigine, 'passmark':passmark, 'shadow':shadow, 'gta':gta}, index=[0])
+                res.to_csv('./update_benchmarks.csv')
+                print("The data are saved")
+
+        else:
+                return render_template("update_benchmarks.html", form=form, title="Update Benchmarks")
+
+@app.route("/remove_gpu")
+def remove_gpu():
+        return render_template("remove_gpu.html", title="Remove GPU")
 
 @app.route("/contact", methods=["GET","POST"])
 def contact():
@@ -151,4 +172,6 @@ def contact():
 		return render_template('contact.html', form=form)
 
 if __name__ == '__main__':
-	app.run(debug=True)
+        port = int(os.environ.get('PORT', 8993))
+        app.run(port=port, debug=True)
+
