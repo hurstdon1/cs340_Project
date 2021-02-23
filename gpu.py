@@ -3,9 +3,12 @@ from forms import ContactForm, gpuForm, brandForm, chipsetForm, pricingForm, ben
 from flask import request
 from flask_wtf import FlaskForm
 from wtforms import TextField, BooleanField, TextAreaField, SubmitField
+import database.db_connector as db
 import os
 
 app = Flask(__name__)
+
+db_connection = db.connect_to_database()
 
 app.config['SECRET_KEY'] = 'f5a6c63d94bf77cb2c4845153a56cbba'
 

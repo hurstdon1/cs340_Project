@@ -90,9 +90,9 @@
 	<table class="table table-striped">
 	  <thead>
 	    <tr>
-	      <th scope="col">Graphics Card</th>
 	      <th scope="col">Chipset</th>
 	      <th scope="col">Brand</th>
+	      <th scope="col">Graphics</th>
 	      <th scope="col">Average Price</th>
 	      <th scope="col">Unigine Score</th>
 	      <th scope="col">Passmark Score</th>
@@ -101,40 +101,23 @@
 	    </tr>
 	  </thead>
 	  <tbody>
+	  	{% for item in gpus %}
 	    <tr>
-	      <td>RTX 3080 FTW3 Gaming</td>
-	      <td>NVIDIA</td>
-	      <td>EVGA</td>
-	      <td>$982.99</td>
-	      <td>18,375</td>
-	      <td>24,062</td>
-	      <td>220</td>
-	      <td>160</td>
+	    	<td>{{item['chipsetManufacturer']}}</td>
+	    	<td>{{item['brandName']}}</td>
+	    	<td>{{item['graphicsCoprocessor']}}</td>
+			<td>{{item['averagePrice']}}</td>
+			<td>{{item['unigineBenchmarkScore']}}</td>
+			<td>{{item['passmarkBenchmarkScore']}}</td>
+			<td>{{item['shadowOfTheTombRaiderFPS']}}</td>
+			<td>{{item['grandTheftAuto5FPS']}}</td>
 	    </tr>
-	    <tr>
-	      <td>RTX 3080 Gaming OC</td>
-	      <td>NVIDIA</td>
-	      <td>Gigabyte</td>
-	      <td>$927.99</td>
-	      <td>18,255</td>
-	      <td>23,885</td>
-	      <td>219</td>
-	      <td>158</td>
-	    <tr>
-	      <td>RTX 3080 Founders Edition</td>
-	      <td>NVIDIA</td>
-	      <td>NVIDIA</td>
-	      <td>$699.99</td>
-	      <td>18,000</td>
-	      <td>24,000</td>
-	      <td>220</td>
-	      <td>162</td>
-	    </tr>
+	  {% endfor %}
 	  </tbody>
 	</table>
 
 
 
-n type="submit" class="btn btn-primary">Go</button>
+ <button type="submit" class="btn btn-primary">Go</button>
 
 {% endblock content %}

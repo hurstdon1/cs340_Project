@@ -1,0 +1,86 @@
+SET FOREIGN_KEY_CHECKS=0; 
+
+DROP TABLE IF EXISTS `averagePrice`;
+CREATE TABLE averagePrice (
+	id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+	averagePriceValue decimal(65) NOT NULL
+) ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS `chipsets`;
+CREATE TABLE chipsets (
+	id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+	chipsetManufacturer varchar(255) NOT NULL, 
+	graphicsCoprocessor varchar(255) NOT NULL
+) ENGINE=InnoDB;
+SET FOREIGN_KEY_CHECKS=1;
+
+DROP TABLE IF EXISTS `graphicsCards`;
+CREATE TABLE graphicsCards(
+	id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+	averagePrice int(11) NOT NULL, 
+	memoryType varchar(255) NOT NULL, 
+	numberOfCudaCores int(11) NOT NULL, 
+	chipset int(11) NOT NULL,
+	FOREIGN KEY(`averagePrice`) REFERENCES `averagePrice` (`id`),
+    	FOREIGN KEY(`chipset`) REFERENCES `chipsets` (`id`)
+) ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS `benchmarkValues`;
+CREATE TABLE benchmarkValues(
+	id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+	unigineBenchmarkScore int(11) NOT NULL, 
+	passmarkBenchmarkScore int(11) NOT NULL, 
+	shadowOfTheTombRaiderFPS int(11) NOT NULL,
+	grandTheftAuto5FPS int(11) NOT NULL
+) ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS `graphicsCard_benchmarkValues`;
+CREATE TABLE graphicsCard_benchmarkValues (
+	gpuID int(11) NOT NULL,
+	benchmarkId int(11) NOT NULL,
+	FOREIGN KEY(`gpuID`) REFERENCES `graphicsCards` (`id`),
+    	FOREIGN KEY(`benchmarkId`) REFERENCES `benchmarkValues` (`id`),
+	PRIMARY KEY (`gpuId`,`benchmarkId`)
+) ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS `brands`;
+CREATE TABLE brands (
+	id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+	brandName varchar(255) NOT NULL, 
+	productSeries varchar(255) NOT NULL,  
+	model varchar(255) NOT NULL
+) ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS `graphicsCard_brands`;
+CREATE TABLE graphicsCard_brands (
+	gpuId int(11) NOT NULL,
+	brandId int(11) NOT NULL,
+	FOREIGN KEY(`gpuId`) REFERENCES `graphicsCards` (`id`),
+    	FOREIGN KEY(`brandId`) REFERENCES `brands` (`id`),
+	PRIMARY KEY (`gpuId`, `brandId`)
+) ENGINE=InnoDB;
+
+SET FOREIGN_KEY_CHECKS=1;
+
+INSERT INTO chipsets (chipsetManufacturer, graphicsCoprocessor) VALUES ('Nvidia','GTX 1660 SUPER'),('Nvidia','RTX 3060 SUPER'), 
+('Nvidia','RTX 3070'),('Nvidia','RTX 3080'),('Nvidia','RTX 3090');
+
+INSERT INTO averagePrice (averagePriceValue) VALUES ('500.00'), ('600.00'), ('750.00'), ('900.00'), ('1750.00');
+
+INSERT INTO brands (brandName, productSeries, model) VALUES ('ASUS', 'GTX 1600', 'ROG Strix'), ('ASUS', 'RTX 3000', 'ROG Strix'), 
+('ASUS','RTX 3000', 'ROG Strix'), ('ASUS','RTX 3000', 'ROG Strix'), ('ASUS', 'RTX 3000', 'ROG Strix');
+
+INSERT INTO benchmarkValues (unigineBenchmarkScore, passmarkBenchmarkScore, shadowOfTheTombRaiderFPS, grandTheftAuto5FPS) VALUES ('3537','12661','101','86'), 
+('8082','19459','117','125'), ('9930','21640','188','132'), ('13749','24129','198','144'), ('18714','25486','203','175');
+
+INSERT INTO graphicsCards (averagePrice, memoryType, numberOfCudaCores, chipset) VALUES ((SELECT id FROM averagePrice WHERE id = '1'), 'DDR6', '1408', (SELECT id FROM chipsets WHERE id = '1')),
+((SELECT id FROM averagePrice WHERE id = '2'), 'DDR6' ,'4864', (SELECT id FROM chipsets WHERE id = '2')),((SELECT id FROM averagePrice WHERE id = '3'), 'DDR6', '5888', (SELECT id FROM chipsets WHERE id = '3')),
+((SELECT id FROM averagePrice WHERE id = '4'), 'DDR6X' ,'8704', (SELECT id FROM chipsets WHERE id = '4')),((SELECT id FROM averagePrice WHERE id = '5'), 'DDR6X', '10496', (SELECT id FROM chipsets WHERE id = '5'));
+
+INSERT INTO graphicsCard_benchmarkValues (gpuId, benchmarkId) VALUES ((SELECT id FROM graphicsCards WHERE id = '1'), (SELECT id FROM benchmarkValues WHERE id = '1')),
+((SELECT id FROM graphicsCards WHERE id = '2'), (SELECT id FROM benchmarkValues WHERE id = '2')),((SELECT id FROM graphicsCards WHERE id = '3'), (SELECT id FROM benchmarkValues WHERE id = '3')),
+((SELECT id FROM graphicsCards WHERE id = '4'), (SELECT id FROM benchmarkValues WHERE id = '4')),((SELECT id FROM graphicsCards WHERE id = '5'), (SELECT id FROM benchmarkValues WHERE id = '5'));
+
+INSERT INTO graphicsCard_brands (gpuId, brandId) VALUES ((SELECT id FROM graphicsCards WHERE id = '1'), (SELECT id FROM brands WHERE id = '1')),
+((SELECT id FROM graphicsCards WHERE id = '2'), (SELECT id FROM brands WHERE id = '2')),((SELECT id FROM graphicsCards WHERE id = '3'), (SELECT id FROM brands WHERE id = '3')),
+((SELECT id FROM graphicsCards WHERE id = '4'), (SELECT id FROM brands WHERE id = '4')),((SELECT id FROM graphicsCards WHERE id = '5'), (SELECT id FROM brands WHERE id = '5'));
