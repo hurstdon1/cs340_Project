@@ -1,8 +1,9 @@
-from flask import Flask, render_template, url_for, json
+from flask import Flask, render_template, url_for, json, redirect
 from forms import ContactForm, gpuForm, brandForm, chipsetForm, pricingForm, benchmarkForm, gpuBenchmarkForm, gpuBrandForm
 from flask import request
 from flask_wtf import FlaskForm
 from wtforms import TextField, BooleanField, TextAreaField, SubmitField
+import pandas as pd
 import os
 import database.db_connector as db
 
@@ -183,8 +184,8 @@ def contact():
 		subject = request.form["subject"]
 		message = request.form["message"]
 		res = pd.DataFrame({'name':name, 'email':email, 'subject':subject ,'message':message}, index=[0])
-		res.to_csv('./contactusMessage.csv')
 		print("The data are saved !")
+		return redirect(url_for('contact'))
 	else:
 		return render_template('contact.html', form=form)
 
