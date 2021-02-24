@@ -1,10 +1,10 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, json
 from forms import ContactForm, gpuForm, brandForm, chipsetForm, pricingForm, benchmarkForm, gpuBenchmarkForm, gpuBrandForm
 from flask import request
 from flask_wtf import FlaskForm
 from wtforms import TextField, BooleanField, TextAreaField, SubmitField
-import database.db_connector as db
 import os
+import database.db_connector as db
 
 app = Flask(__name__)
 
@@ -23,7 +23,21 @@ def about():
 
 @app.route("/comparisons")
 def comparisons():
-	return render_template('comparisons.html', title='Comparisons')
+
+	query = """SELECT chipsetManufacturer, brandName, graphicsCoprocessor, averagePrice, unigineBenchmarkScore, passmarkBenchmarkScore, shadowOfTheTombRaiderFPS, grandTheftAuto5FPS 
+	 		FROM graphicsCards
+			INNER JOIN graphicsCard_brands ON graphicsCards.id = graphicsCard_brands.gpuId
+			INNER JOIN brands ON graphicsCard_brands.gpuId = brands.id
+			INNER JOIN graphicsCard_benchmarkValues ON graphicsCards.id = graphicsCard_benchmarkValues.gpuID
+			INNER JOIN benchmarkValues ON benchmarkValues.id = graphicsCard_benchmarkValues.benchmarkId
+			INNER JOIN chipsets ON chipsets.id = graphicsCards.chipset
+			"""
+
+	cursor = db.execute_query(db_connection=db_connection, query=query)
+
+	results = cursor.fetchall()
+
+	return render_template('comparisons.html', title='Comparisons', gpu=results)
 
 @app.route("/add")
 def add():
