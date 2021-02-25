@@ -1,5 +1,14 @@
 from flask_wtf import FlaskForm
-from wtforms import TextField, BooleanField, TextAreaField, SubmitField, IntegerField
+from wtforms import TextField, BooleanField, TextAreaField, SubmitField, IntegerField, SelectField, SelectMultipleField, widgets
+
+# This Multicheckbox field was borrowed from https://gist.github.com/llloo/d4b12ca9e98723e5f523573058a8c0c6
+
+class searchForm(FlaskForm):
+	gpu = TextField("Graphics Card")
+	chipset = SelectField(u'Chipset',choices = [('Nvidia', 'Nvidia'), ('AMD', 'AMD')])
+	brand = SelectField(u'Brand', choices = [('AMD', 'AMD'), ('ASUS', 'ASUS'), ('EVGA', 'EVGA'), ('Gigabyte', 'Gigabyte'), ('MSI', 'MSI'), ('NVIDIA', 'NVIDIA'), ('Power VR', 'Power VR'), ('Sapphire', 'Sapphire'), ('Via', 'Via'), ('Zotac', 'Zotac') ])
+	maxPrice = IntegerField("Maximum Price")
+	submit = SubmitField("Submit")
 
 class ContactForm(FlaskForm):
     name = TextField("Name")
