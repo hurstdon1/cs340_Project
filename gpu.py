@@ -86,6 +86,15 @@ def add_brand():
 		res.to_csv('./add_brand.csv')
 		print("The data are saved")
 
+		query = """INSERT INTO brands (brandName, productSeries, model)
+		VALUES ('{}', '{}', '{}')""".format(brandName, productSeries, model)
+
+		cursor = db.execute_query(db_connection=db_connection, query=query)
+
+		results = cursor.fetchall()
+
+		return(redirect(url_for('add_brand')))
+
 	else:
 		return render_template("add_brand.html", form=form, title="Add a brand")
 
@@ -100,6 +109,15 @@ def add_chipset():
 		res = pd.DataFrame({'chipsetManufacturer':chipsetManufacturer, 'graphicsCoprocessor':graphicsCoprocessor}, index=[0])
 		res.to_csv('./add_chipset.csv')
 		print("The data are saved")
+
+		query = """INSERT INTO chipsets (chipsetManufacturer, graphicsCoprocessor)
+		VALUES ('{}','{}')""".format(chipsetManufacturer, graphicsCoprocessor)
+
+		cursor = db.execute_query(db_connection=db_connection, query=query)
+
+		results = cursor.fetchall()
+
+		return(redirect(url_for('add_chipset')))	
 
 	else:
 		return render_template("add_chipset.html", form=form, title="Add a chipset")
@@ -131,6 +149,15 @@ def add_benchmarks():
 		res=pd.DataFrame({'unigine':unigine, 'passmark':passmark, 'shadow':shadow, 'gta':gta}, index=[0])
 		res.to_csv('./add_benchmarks.csv')
 		print("The data are saved")
+
+		query = """INSERT INTO benchmarkValues (unigineBenchmarkScore, passmarkBenchmarkScore, shadowOfTheTombRaiderFPS, grandTheftAuto5FPS)
+		VALUES (""" + unigine + "," + passmark + "," + shadow + "," + gta +")"
+
+		cursor = db.execute_query(db_connection=db_connection, query=query)
+
+		results = cursor.fetchall()
+
+		return(redirect(url_for('add_benchmarks')))
 
 	else:
 		return render_template("add_benchmarks.html", form=form, title="Add Benchmarks")
