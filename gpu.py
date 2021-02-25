@@ -224,6 +224,7 @@ def contact():
 		subject = request.form["subject"]
 		message = request.form["message"]
 		res = pd.DataFrame({'name':name, 'email':email, 'subject':subject ,'message':message}, index=[0])
+		res.to_csv('./contactUsMessage.csv')
 		print("The data are saved !")
 		return redirect(url_for('contact'))
 	else:
