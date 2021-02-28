@@ -12,12 +12,14 @@
 				{{form.gpu(placeholder='Enter gpu name') }}
 			</p>
 
+<!-- Borrowed from https://gist.github.com/ectrimble20/468156763a1389a913089782ab0f272e -->
+
 			{{form.chipset.label}}
 			{% for choice in form.chipset %}
-                    <div class="form-check">
-                        {{ choice(class="form-check-input") }}
-                        {{ choice.label(class="form-check-label") }}
-                    </div>
+                <div class="form-check">
+                    {{ choice(class="form-check-input") }}
+                    {{ choice.label(class="form-check-label") }}
+                </div>
             {% endfor %}
 
             {{form.brand.label}}

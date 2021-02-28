@@ -30,12 +30,67 @@ def comparisons():
 	if request.method == 'POST':
 
 		gpu = request.form["gpu"]
-		chipset = request.form["chipset"]
-		brand = request.form["brand"]
+		chipset = form.chipset.data
+		brand = form.brand.data
 		maxPrice = request.form["maxPrice"]
 
-		print("THE CHIPSET IS" + chipset)
-		print("THE BRAND IS" + brand)
+		# Get the length of the chipset list and instantiate the chipset Query String
+		chipset_len = len(chipset) - 1
+		chipsetQuery = ""
+		
+		# IF no values are selected
+		if chipset_len == -1:
+
+			# select all by default and update chipset length
+			chipset.append("AMD")
+			chipset.append("Nvidia")
+			chipset_len = len(chipset) - 1
+
+
+		# For values in the list of chipsets
+		for value in chipset:
+
+			# If we've reached the final value
+			if chipset.index(value) == chipset_len:
+				chipsetQuery += "chipsetManufacturer='" + value + "' AND "
+				break
+			# If we are still adding more values (using OR statement for next value)
+			else:
+				chipsetQuery += "chipsetManufacturer='" + value + "' OR "
+
+		# Get the length of the brand list and instantiate the brand Query String
+		brand_len = len(brand) - 1
+		brandQuery = ""
+
+		# if no values are selected, Add all options to list by default
+		if brand_len == -1:
+
+			# select all values by default
+			brand_list = ['AMD','ASUS','EVGA','Gigabyte','MSI','NVIDIA','Power VR', 'Sapphire','Via','Zotac']
+
+			# Adding all values to list by default
+			for value in brand_list:
+				brand.append(value)
+
+			# updating the length of brand list
+			brand_len = len(brand) - 1
+
+		# For all values in list of brands
+		for value in brand:
+
+			# If we've reached the final value
+			if brand.index(value) == brand_len:
+				brandQuery += "brandName='" + value + "';"
+				break
+
+			# If we are still adding more values (using OR statement for next value)
+			else:
+				brandQuery += "brandName='" + value + "' OR "
+		
+		# Testing statement here
+		for value in brand:
+			print("THE BRAND IS" + value)
+
 
 		query ="""SELECT chipsetManufacturer, brandName, graphicsCoprocessor, averagePrice, unigineBenchmarkScore, passmarkBenchmarkScore, shadowOfTheTombRaiderFPS, grandTheftAuto5FPS 
 	 		FROM graphicsCards
@@ -44,7 +99,9 @@ def comparisons():
 			INNER JOIN graphicsCard_benchmarkValues ON graphicsCards.id = graphicsCard_benchmarkValues.gpuID
 			INNER JOIN benchmarkValues ON benchmarkValues.id = graphicsCard_benchmarkValues.benchmarkId
 			INNER JOIN chipsets ON chipsets.id = graphicsCards.chipset
-			WHERE chipsetManufacturer = '{}' AND brandName = '{}' """.format(chipset, brand)
+			WHERE """ + chipsetQuery + brandQuery
+
+			# """chipsetManufacturer = '{}' AND brandName = '{}' """
 
 		cursor = db.execute_query(db_connection=db_connection, query=query)
 
