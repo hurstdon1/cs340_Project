@@ -34,6 +34,12 @@ def comparisons():
 		brand = form.brand.data
 		maxPrice = request.form["maxPrice"]
 
+		gpuQuery = ""
+
+		if gpu != "":
+			gpuQuery = "graphicsCoprocessor LIKE '%%{}%%' AND ".format(gpu)
+
+
 		# Get the length of the chipset list and instantiate the chipset Query String
 		chipset_len = len(chipset) - 1
 		chipsetQuery = "("
@@ -87,9 +93,11 @@ def comparisons():
 			else:
 				brandQuery += "brandName='" + value + "' OR "
 
+		# If empty string was returned (no max price set), set to a default value
 		if maxPrice == "":
 			maxPrice = 9999
 
+		# Price query declaration
 		priceQuery = "averagePrice <= '{}';".format(maxPrice)
 
 
@@ -99,8 +107,8 @@ def comparisons():
 			INNER JOIN brands ON graphicsCard_brands.brandId = brands.id
 			INNER JOIN graphicsCard_benchmarkValues ON graphicsCards.id = graphicsCard_benchmarkValues.gpuID
 			INNER JOIN benchmarkValues ON benchmarkValues.id = graphicsCard_benchmarkValues.benchmarkId
-			INNER JOIN chipsets ON chipsets.id = graphicsCards.chipset
-			WHERE """ + chipsetQuery + brandQuery + priceQuery
+			INNER JOIN chipsets ON graphicsCards.chipset = chipsets.id
+			WHERE """ + gpuQuery + chipsetQuery + brandQuery + priceQuery
 
 			# """chipsetManufacturer = '{}' AND brandName = '{}' """
 

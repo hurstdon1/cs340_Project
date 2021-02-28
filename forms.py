@@ -11,7 +11,7 @@ class searchForm(FlaskForm):
 	gpu = TextField("Graphics Card")
 	chipset = MultiCheckboxField(u'Chipset',choices = [('Nvidia', 'Nvidia'), ('AMD', 'AMD')], validators=[InputRequired()], default=['Nvidia'])
 	brand = MultiCheckboxField(u'Brand', choices = [('AMD', 'AMD'), ('ASUS', 'ASUS'), ('EVGA', 'EVGA'), ('Gigabyte', 'Gigabyte'), ('MSI', 'MSI'), ('NVIDIA', 'NVIDIA'), ('Power VR', 'Power VR'), ('Sapphire', 'Sapphire'), ('Via', 'Via'), ('Zotac', 'Zotac') ], validators=[InputRequired()], default=['ASUS'])
-	maxPrice = IntegerField("Maximum Price", filters=[lambda x: x or None])
+	maxPrice = IntegerField("Maximum Price")
 	submit = SubmitField("Submit")
 
 class ContactForm(FlaskForm):
