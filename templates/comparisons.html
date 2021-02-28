@@ -12,15 +12,31 @@
 				{{form.gpu(placeholder='Enter gpu name') }}
 			</p>
 
+			{{form.chipset.label}}
+			{% for choice in form.chipset %}
+                    <div class="form-check">
+                        {{ choice(class="form-check-input") }}
+                        {{ choice.label(class="form-check-label") }}
+                    </div>
+            {% endfor %}
+
+            {{form.brand.label}}
+            {% for choice in form.brand %}
+                <div class="form-check">
+                    {{ choice(class="form-check-input") }}
+                    {{ choice.label(class="form-check-label") }}
+                </div>
+            {% endfor %}
+<!-- 
 			<p>
 				{{form.chipset.label}} <br>
 				{{form.chipset}} 		
 			</p>
-
-			<p>
+ -->
+<!-- 			<p>
 				{{form.brand.label}} <br>
 				{{form.brand}}
-			</p>
+			</p> -->
 
 			<p>
 				{{form.maxPrice.label}} <br>

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, json, redirect
-from forms import ContactForm, gpuForm, brandForm, chipsetForm, pricingForm, benchmarkForm, gpuBenchmarkForm, gpuBrandForm, searchForm
+from forms import ContactForm, gpuForm, brandForm, chipsetForm, benchmarkForm, gpuBenchmarkForm, gpuBrandForm, searchForm
 from flask import request
 from flask_wtf import FlaskForm
 from wtforms import TextField, BooleanField, TextAreaField, SubmitField
@@ -34,10 +34,13 @@ def comparisons():
 		brand = request.form["brand"]
 		maxPrice = request.form["maxPrice"]
 
+		print("THE CHIPSET IS" + chipset)
+		print("THE BRAND IS" + brand)
+
 		query ="""SELECT chipsetManufacturer, brandName, graphicsCoprocessor, averagePrice, unigineBenchmarkScore, passmarkBenchmarkScore, shadowOfTheTombRaiderFPS, grandTheftAuto5FPS 
 	 		FROM graphicsCards
 			INNER JOIN graphicsCard_brands ON graphicsCards.id = graphicsCard_brands.gpuId
-			INNER JOIN brands ON graphicsCard_brands.gpuId = brands.id
+			INNER JOIN brands ON graphicsCard_brands.brandId = brands.id
 			INNER JOIN graphicsCard_benchmarkValues ON graphicsCards.id = graphicsCard_benchmarkValues.gpuID
 			INNER JOIN benchmarkValues ON benchmarkValues.id = graphicsCard_benchmarkValues.benchmarkId
 			INNER JOIN chipsets ON chipsets.id = graphicsCards.chipset
@@ -66,6 +69,7 @@ def add_gpu():
 		memoryType = request.form["memoryType"]
 		numberOfCudaCores = request.form["numberOfCudaCores"]
 		chipsetId = request.form["chipsetId"]
+		averagePrice = request.form["averagePrice"]
 		res = pd.DataFrame({'priceID':priceID,'memoryType':memoryType, 'numberOfCudaCores':numberOfCudaCores, 'chipsetId':chipsetId}, index=[0])
 		res.to_csv('./add_gpu.csv')
 		print("The data are saved")
@@ -121,20 +125,6 @@ def add_chipset():
 
 	else:
 		return render_template("add_chipset.html", form=form, title="Add a chipset")
-
-@app.route("/add_pricing", methods=["GET","POST"])
-def add_pricing():
-
-	form = pricingForm()
-
-	if request.method == 'POST':
-		averagePrice = request.form["averagePrice"]
-		res = pd.DataFrame({'averagePrice':averagePrice}, index=[0])
-		res.to_csv('./add_pricing.csv')
-		print("The data are saved")
-
-	else:
-		return render_template("add_pricing.html", form=form, title="Add Pricing")
 
 @app.route("/add_benchmarks", methods=["GET","POST"])
 def add_benchmarks():
