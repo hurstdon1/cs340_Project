@@ -80,16 +80,17 @@ def comparisons():
 
 			# If we've reached the final value
 			if brand.index(value) == brand_len:
-				brandQuery += "brandName='" + value + "';"
+				brandQuery += "brandName='" + value + "' AND "
 				break
 
 			# If we are still adding more values (using OR statement for next value)
 			else:
 				brandQuery += "brandName='" + value + "' OR "
-		
-		# Testing statement here
-		for value in brand:
-			print("THE BRAND IS" + value)
+
+		if maxPrice == "":
+			maxPrice = 9999
+
+		priceQuery = "averagePrice <= '{}';".format(maxPrice)
 
 
 		query ="""SELECT chipsetManufacturer, brandName, graphicsCoprocessor, averagePrice, unigineBenchmarkScore, passmarkBenchmarkScore, shadowOfTheTombRaiderFPS, grandTheftAuto5FPS 
@@ -99,7 +100,7 @@ def comparisons():
 			INNER JOIN graphicsCard_benchmarkValues ON graphicsCards.id = graphicsCard_benchmarkValues.gpuID
 			INNER JOIN benchmarkValues ON benchmarkValues.id = graphicsCard_benchmarkValues.benchmarkId
 			INNER JOIN chipsets ON chipsets.id = graphicsCards.chipset
-			WHERE """ + chipsetQuery + brandQuery
+			WHERE """ + chipsetQuery + brandQuery + priceQuery
 
 			# """chipsetManufacturer = '{}' AND brandName = '{}' """
 
