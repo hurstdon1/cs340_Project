@@ -36,7 +36,7 @@ def comparisons():
 
 		# Get the length of the chipset list and instantiate the chipset Query String
 		chipset_len = len(chipset) - 1
-		chipsetQuery = ""
+		chipsetQuery = "("
 		
 		# IF no values are selected
 		if chipset_len == -1:
@@ -52,7 +52,7 @@ def comparisons():
 
 			# If we've reached the final value
 			if chipset.index(value) == chipset_len:
-				chipsetQuery += "chipsetManufacturer='" + value + "' AND "
+				chipsetQuery += "chipsetManufacturer='" + value + "') AND "
 				break
 			# If we are still adding more values (using OR statement for next value)
 			else:
@@ -60,7 +60,7 @@ def comparisons():
 
 		# Get the length of the brand list and instantiate the brand Query String
 		brand_len = len(brand) - 1
-		brandQuery = ""
+		brandQuery = "("
 
 		# if no values are selected, Add all options to list by default
 		if brand_len == -1:
@@ -80,7 +80,7 @@ def comparisons():
 
 			# If we've reached the final value
 			if brand.index(value) == brand_len:
-				brandQuery += "brandName='" + value + "' AND "
+				brandQuery += "brandName='" + value + "') AND "
 				break
 
 			# If we are still adding more values (using OR statement for next value)
