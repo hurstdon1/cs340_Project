@@ -6,11 +6,7 @@
     
     <form action="{{ url_for('add_gpu') }}" method=post>
         <div>
-            <!-- price Id -->
-            <p>
-                {{ form.priceId.label }} <br>
-                {{ form.priceId(placeholder='Enter Price Id') }}
-            </p>
+
             <!-- memory Type  -->
             <p>
                 {{ form.memoryType.label }} <br>

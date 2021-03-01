@@ -22,7 +22,6 @@ class ContactForm(FlaskForm):
     submit = SubmitField("Send")
 
 class gpuForm(FlaskForm):
-	priceId = IntegerField("Price Id Number")
 	memoryType = TextField("Memory Type")
 	numberOfCudaCores = IntegerField("Number Of Cuda Cores")
 	chipsetId = IntegerField("Chipset Id Number")

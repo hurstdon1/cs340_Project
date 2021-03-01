@@ -276,7 +276,6 @@ ALTER TABLE `graphicsCards`
 -- Constraints for table `graphicsCards`
 --
 ALTER TABLE `graphicsCards`
-  ADD CONSTRAINT `graphicsCards_ibfk_1` FOREIGN KEY (`averagePrice`) REFERENCES `averagePrice` (`id`),
   ADD CONSTRAINT `graphicsCards_ibfk_2` FOREIGN KEY (`chipset`) REFERENCES `chipsets` (`id`);
 
 --

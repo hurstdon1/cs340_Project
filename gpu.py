@@ -131,14 +131,22 @@ def add_gpu():
 	form = gpuForm()
 
 	if request.method == 'POST':
-		priceId = request.form["priceIdNumber"]
 		memoryType = request.form["memoryType"]
 		numberOfCudaCores = request.form["numberOfCudaCores"]
 		chipsetId = request.form["chipsetId"]
 		averagePrice = request.form["averagePrice"]
-		res = pd.DataFrame({'priceID':priceID,'memoryType':memoryType, 'numberOfCudaCores':numberOfCudaCores, 'chipsetId':chipsetId}, index=[0])
+		res = pd.DataFrame({'memoryType':memoryType, 'numberOfCudaCores':numberOfCudaCores, 'chipsetId':chipsetId, 'averagePrice':averagePrice}, index=[0])
 		res.to_csv('./add_gpu.csv')
 		print("The data are saved")
+
+		query = """INSERT INTO graphicsCards(memoryType, numberOfCudaCores, chipset, averagePrice)
+		Values ('{}','{}','{}','{}')""".format(memoryType, numberOfCudaCores, chipsetId, averagePrice)
+
+		cursor = db.execute_query(db_connection=db_connection, query=query)
+
+		results = cursor.fetchall()
+
+		return(redirect(url_for('add_gpu')))
 
 	else:
 		return render_template("add_gpu.html", form=form, title="Add a gpu")
