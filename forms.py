@@ -24,7 +24,7 @@ class ContactForm(FlaskForm):
 class gpuForm(FlaskForm):
 	memoryType = TextField("Memory Type")
 	numberOfCudaCores = IntegerField("Number Of Cuda Cores")
-	chipsetId = IntegerField("Chipset Id Number")
+	chipsetId = SelectField(u"Chipset Id Number", choices=[('1','1'), ('2','2'), ('3','3'), ('4','4'), ('5','5')])
 	averagePrice = IntegerField("Average Price")
 	submit = SubmitField("Submit")
 
