@@ -128,9 +128,21 @@ def add():
 @app.route("/add_gpu", methods=["GET","POST"])
 def add_gpu():
 
+	# Create a query for the chipsets and run it to get all active chipsets in the DB
+	chipsetQuery = "SELECT * from chipsets;"
+	cursor = db.execute_query(db_connection=db_connection, query=chipsetQuery)
+	chipsetResults = cursor.fetchall()
+
+	# Create tuples for each thing in the db with the id and graphics coprocessor
+	chipset_list = [(i["id"], i["graphicsCoprocessor"]) for i in chipsetResults]
+
 	form = gpuForm()
 
+	# fill the form the with chipset choices from the list
+	form.chipsetId.choices = chipset_list
+
 	if request.method == 'POST':
+
 		memoryType = request.form["memoryType"]
 		numberOfCudaCores = request.form["numberOfCudaCores"]
 		chipsetId = request.form["chipsetId"]
