@@ -1,43 +1,38 @@
 {% extends "layout.html" %}
 {% block content%}
 
-        <div class="content-section">
-        <h2>Update Benchmark Scores</h2>
-	<h3 class="pt-2">SEARCH</h2>
-	<div class="form-group">
-            <label for="benchmarks">Benchmarks </label>
-            <input type="text" class="form-control" id="benchmarksSearch">
-            <small id="benchmarksSearchHelp" class="form-text text-muted">Enter the name of the graphics card you want to update benchmarks for</small>
-        </div>
-	  <button type="submit" class="btn btn-primary">search</button>
-	<form action="{{ url_for('update_benchmarks') }}" method=post>
-        <div>
-            <!-- price Id -->
-            <p>
-                {{ form.unigine.label }} <br>
-                {{ form.unigine(placeholder='Update score') }}
-            </p>
-            <!-- memory Type  -->
-            <p>
-                {{ form.passmark.label }} <br>
-                {{ form.passmark(placeholder='Update score') }}
-            </p>
-            <!-- Number of Cuda Cores -->
-            <p>
-                {{ form.shadow.label }}<br>
-                {{form.shadow(placeholder='Update avg FPS')}}
-            </p>
-            <!-- Chipset Id -->
-            <p>
-                {{ form.gta.label }}<br>
-                {{ form.gta(placeholder='Update avg FPS') }}
-            </p>
-            <p>
-		 {{ form.submit }}
-	    <p/>  	
-        </div>
-    </form>
-</div>
+    <div class="content-section">
+    <h2>Update Benchmark Scores</h2>
+    <h4>Please select <strong>Edit</strong> in the row you'd like to change and enter your updated benchmark values</h4>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Chipset</th>
+          <th scope="col">Brand</th>
+          <th scope="col">Graphics</th>
+          <th scope="col">Average Price</th>
+          <th scope="col">Unigine Score</th>
+          <th scope="col">Passmark Score</th>
+          <th scope="col">Shadow of the Tomb Raider FPS</th>
+          <th scope="col">GTA 5 FPS</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in gpu %}
+        <tr>
+            <td>{{item['chipsetManufacturer']}}</td>
+            <td>{{item['brandName']}}</td>
+            <td>{{item['graphicsCoprocessor']}}</td>
+            <td>{{item['averagePrice']}}</td>
+            <td>{{item['unigineBenchmarkScore']}}</td>
+            <td>{{item['passmarkBenchmarkScore']}}</td>
+            <td>{{item['shadowOfTheTombRaiderFPS']}}</td>
+            <td>{{item['grandTheftAuto5FPS']}}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
 
 {% endblock content %}
 

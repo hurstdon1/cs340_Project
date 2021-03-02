@@ -314,6 +314,18 @@ def update_benchmarks():
 
         form = benchmarkForm()
 
+        query = """SELECT chipsetManufacturer, brandName, graphicsCoprocessor, averagePrice, unigineBenchmarkScore, passmarkBenchmarkScore, shadowOfTheTombRaiderFPS, grandTheftAuto5FPS 
+	 		FROM graphicsCards
+			INNER JOIN graphicsCard_brands ON graphicsCards.id = graphicsCard_brands.gpuId
+			INNER JOIN brands ON graphicsCard_brands.brandId = brands.id
+			INNER JOIN graphicsCard_benchmarkValues ON graphicsCards.id = graphicsCard_benchmarkValues.gpuID
+			INNER JOIN benchmarkValues ON benchmarkValues.id = graphicsCard_benchmarkValues.benchmarkId
+			INNER JOIN chipsets ON graphicsCards.chipset = chipsets.id"""
+
+	cursor = db.execute_query(db_connection=db_connection, query=query)
+
+	results = cursor.fetchall()
+
         if request.method =='POST':
                 unigine = request.form["unigine"]
                 passmark = request.form["passmark"]
@@ -324,7 +336,7 @@ def update_benchmarks():
                 print("The data are saved")
 
         else:
-                return render_template("update_benchmarks.html", form=form, title="Update Benchmarks")
+                return render_template("update_benchmarks.html", form=form, title="Update Benchmarks", gpu=results)
 
 @app.route("/remove_gpu")
 def remove_gpu():
