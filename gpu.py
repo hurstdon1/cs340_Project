@@ -241,7 +241,27 @@ def add_benchmarks():
 @app.route("/add_gpu_benchmarks")
 def add_gpu_benchmarks():
 
+	# Create a query for the gpu and run it to get all active chipsets in the DB
+	gpuQuery = "SELECT * from graphicsCards;"
+	cursor = db.execute_query(db_connection=db_connection, query=gpuQuery)
+	gpuResults = cursor.fetchall()
+
+	# Create tuples for each thing in the db with the id and graphics coprocessor
+	gpu_list = [(i["id"], i["id"]) for i in gpuResults]
+
+	# Create a query for the benchmarks and run it to get all active benchmarks in the DB
+	benchmarkQuery = "SELECT * from benchmarkValues"
+	cursor = db.execute_query(db_connection=db_connection, query=benchmarkQuery)
+	benchmarkResults = cursor.fetchall()
+
+	# Create tuples for each thing in the db with the id and graphics coprocessor
+	benchmark_list = [(i["id"], i["id"]) for i in benchmarkResults]
+
+
 	form = gpuBenchmarkForm()
+
+	form.gpuIdNumber.choices = gpu_list
+	form.benchmarkIdNumber.choices = benchmark_list
 
 	if request.method == 'POST':
 		gpuIdNumber = request.form["gpuIdNumber"]
@@ -256,7 +276,28 @@ def add_gpu_benchmarks():
 @app.route("/add_gpu_brand")
 def add_gpu_brand():
 
+	# Create a query for the gpu and run it to get all active chipsets in the DB
+	gpuQuery = "SELECT * from graphicsCards;"
+	cursor = db.execute_query(db_connection=db_connection, query=gpuQuery)
+	gpuResults = cursor.fetchall()
+
+	# Create tuples for each thing in the db with the id and graphics coprocessor
+	gpu_list = [(i["id"], i["id"]) for i in gpuResults]
+
+	# Create a query for the benchmarks and run it to get all active benchmarks in the DB
+	brandQuery = "SELECT * from brands"
+	cursor = db.execute_query(db_connection=db_connection, query=brandQuery)
+	brandResults = cursor.fetchall()
+
+	# Create tuples for each thing in the db with the id and graphics coprocessor
+	brand_list = [(i["id"], i["id"]) for i in brandResults]
+
+
 	form = gpuBrandForm()
+
+	form.gpuIdNumber.choices = gpu_list
+	form.brandIdNumber.choices = brand_list
+
 
 	if request.method == 'POST':
 		gpuIdNumber = request.form["gpuIdNumber"]

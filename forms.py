@@ -24,7 +24,6 @@ class ContactForm(FlaskForm):
 class gpuForm(FlaskForm):
 	memoryType = TextField("Memory Type")
 	numberOfCudaCores = IntegerField("Number Of Cuda Cores")
-	# chipsetId = SelectField(u"Chipset Id Number", choices=[('1','1'), ('2','2'), ('3','3'), ('4','4'), ('5','5')])
 	chipsetId = SelectField(u"Chipset", coerce=int)
 	averagePrice = IntegerField("Average Price")
 	submit = SubmitField("Submit")
@@ -49,11 +48,11 @@ class benchmarkForm(FlaskForm):
 	submit = SubmitField("Submit")
 
 class gpuBenchmarkForm(FlaskForm):
-	gpuIdNumber = IntegerField("GPU ID Number")
-	benchmarkIdNumber = IntegerField("Bechmark ID Number")
+	gpuIdNumber = SelectField(u"GPU ID Number", coerce=int)
+	benchmarkIdNumber = SelectField(u"Bechmark ID Number", coerce=int)
 	submit = SubmitField("Submit")
 
 class gpuBrandForm(FlaskForm):
-	gpuIdNumber = IntegerField("GPU ID Number")
-	brandIdNumber = IntegerField("Brand ID Number")
+	gpuIdNumber = SelectField(u"GPU ID Number", coerce=int)
+	brandIdNumber = SelectField(u"Brand ID Number", coerce=int)
 	submit = SubmitField("Submit")
