@@ -238,7 +238,7 @@ def add_benchmarks():
 	else:
 		return render_template("add_benchmarks.html", form=form, title="Add Benchmarks")
 
-@app.route("/add_gpu_benchmarks")
+@app.route("/add_gpu_benchmarks", methods=["GET","POST"])
 def add_gpu_benchmarks():
 
 	# Create a query for the gpu and run it to get all active chipsets in the DB
@@ -265,15 +265,23 @@ def add_gpu_benchmarks():
 
 	if request.method == 'POST':
 		gpuIdNumber = request.form["gpuIdNumber"]
-		benchmarkIdnumber = request.form["benchmarkIdNumber"]
-		res=pd.DataFrame({'gpuIdNumber':gpuIdNumber, 'benchmarkIdnumber':benchmarkIdnumber}, index=[0])
+		benchmarkIdNumber = request.form["benchmarkIdNumber"]
+		res=pd.DataFrame({'gpuIdNumber':gpuIdNumber, 'benchmarkIdNumber':benchmarkIdNumber}, index=[0])
 		res.to_csv('./add_gpu_benchmarks.csv')
 		print("The data are saved")
+
+		query = """INSERT INTO graphicsCard_benchmarkValues(gpuID, benchmarkID)
+		VALUES ({},{})""".format(gpuIdNumber, benchmarkIdNumber)
+
+		cursor = db.execute_query(db_connection=db_connection, query=query)
+
+		results = cursor.fetchall()
+		return(redirect(url_for('add_gpu_benchmarks')))
 
 	else:
 		return render_template("add_gpu_benchmarks.html", form=form, title="Add GPU Benchmarks")
 
-@app.route("/add_gpu_brand")
+@app.route("/add_gpu_brand", methods=["GET","POST"])
 def add_gpu_brand():
 
 	# Create a query for the gpu and run it to get all active chipsets in the DB
@@ -305,6 +313,14 @@ def add_gpu_brand():
 		res=pd.DataFrame({'gpuIdNumber': gpuIdNumber, 'brandIdNumber':brandIdNumber}, index=[0])
 		res.to_csv('./add_gpu_brand.csv')
 		print("The data are saved")
+
+		query = """INSERT INTO graphicsCard_brands(gpuID, brandID)
+		VALUES ({},{})""".format(gpuIdNumber, brandIdNumber)
+
+		cursor = db.execute_query(db_connection=db_connection, query=query)
+
+		results = cursor.fetchall()
+		return(redirect(url_for('add_gpu_brand')))
 		
 	else:
 		return render_template("add_gpu_brand.html", form=form, title="Add GPU Brands")
