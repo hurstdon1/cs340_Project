@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, json, redirect
-from forms import ContactForm, gpuForm, brandForm, chipsetForm, benchmarkForm, gpuBenchmarkForm, gpuBrandForm, searchForm
+from forms import ContactForm, gpuForm, brandForm, chipsetForm, benchmarkForm, gpuBenchmarkForm, gpuBrandForm, searchForm, updateBenchmarkForm
 from flask import request
 from flask_wtf import FlaskForm
 from wtforms import TextField, BooleanField, TextAreaField, SubmitField
@@ -312,9 +312,19 @@ def add_gpu_brand():
 @app.route("/update_benchmarks", methods=["GET","POST"])
 def update_benchmarks():
 
-        form = benchmarkForm()
+	# Benchmark query for a dynamic drop-down
+	benchmarkQuery = "SELECT * from benchmarkValues"
+	cursor = db.execute_query(db_connection=db_connection, query=benchmarkQuery)
+	benchmarkResults = cursor.fetchall()
 
-        query = """SELECT chipsetManufacturer, brandName, graphicsCoprocessor, averagePrice, unigineBenchmarkScore, passmarkBenchmarkScore, shadowOfTheTombRaiderFPS, grandTheftAuto5FPS 
+	# Create tuples for each thing in the db with the id and graphics coprocessor
+	benchmark_list = [(i["id"], i["id"]) for i in benchmarkResults]
+
+        form = updateBenchmarkForm()
+
+        form.benchmarkIdNumber.choices = benchmark_list
+
+        query = """SELECT chipsetManufacturer, brandName, graphicsCoprocessor, averagePrice, benchmarkValues.id, unigineBenchmarkScore, passmarkBenchmarkScore, shadowOfTheTombRaiderFPS, grandTheftAuto5FPS 
 	 		FROM graphicsCards
 			INNER JOIN graphicsCard_brands ON graphicsCards.id = graphicsCard_brands.gpuId
 			INNER JOIN brands ON graphicsCard_brands.brandId = brands.id
@@ -322,18 +332,27 @@ def update_benchmarks():
 			INNER JOIN benchmarkValues ON benchmarkValues.id = graphicsCard_benchmarkValues.benchmarkId
 			INNER JOIN chipsets ON graphicsCards.chipset = chipsets.id"""
 
-	cursor = db.execute_query(db_connection=db_connection, query=query)
+	newcursor = db.execute_query(db_connection=db_connection, query=query)
 
-	results = cursor.fetchall()
+	results = newcursor.fetchall()
 
         if request.method =='POST':
-                unigine = request.form["unigine"]
-                passmark = request.form["passmark"]
-                shadow = request.form["shadow"]
-                gta = request.form["gta"]
-                res=pd.DataFrame({'unigine':unigine, 'passmark':passmark, 'shadow':shadow, 'gta':gta}, index=[0])
-                res.to_csv('./update_benchmarks.csv')
-                print("The data are saved")
+        	benchmarkIdNumber = request.form["benchmarkIdNumber"]
+            	unigine = request.form["unigine"]
+            	passmark = request.form["passmark"]
+            	shadow = request.form["shadow"]
+            	gta = request.form["gta"]
+            	res=pd.DataFrame({'benchmarkIdNumber':benchmarkIdNumber,'unigine':unigine, 'passmark':passmark, 'shadow':shadow, 'gta':gta}, index=[0])
+            	res.to_csv('./update_benchmarks.csv')
+            	print("The data are saved")
+
+            	updateQuery = """UPDATE benchmarkValues 
+            	SET unigineBenchmarkScore={}, passmarkBenchmarkScore={},shadowOfTheTombRaiderFPS={}, grandTheftAuto5FPS={}
+            	WHERE id={}""".format(unigine, passmark, shadow, gta, benchmarkIdNumber)
+
+            	cursor = db.execute_query(db_connection=db_connection, query=updateQuery)
+      
+            	return redirect(url_for('update_benchmarks'))
 
         else:
                 return render_template("update_benchmarks.html", form=form, title="Update Benchmarks", gpu=results)

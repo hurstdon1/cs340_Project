@@ -6,22 +6,22 @@
     
     <form action="{{ url_for('add_benchmarks') }}" method=post>
         <div>
-            <!-- price Id -->
+            <!-- Unigine -->
             <p>
                 {{ form.unigine.label }} <br>
                 {{ form.unigine(placeholder='Enter score') }}
             </p>
-            <!-- memory Type  -->
+            <!-- Passmark -->
             <p>
                 {{ form.passmark.label }} <br>
                 {{ form.passmark(placeholder='Enter score') }}
             </p>
-            <!-- Number of Cuda Cores -->
+            <!-- Shadow of the tomb raider -->
             <p>
                 {{ form.shadow.label }}<br>
                 {{form.shadow(placeholder='Enter avg FPS')}}
             </p>
-            <!-- Chipset Id -->
+            <!-- Gta -->
             <p>
                 {{ form.gta.label }}<br>
                 {{ form.gta(placeholder='Enter avg FPS') }}

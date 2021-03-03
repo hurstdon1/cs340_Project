@@ -3,7 +3,43 @@
 
     <div class="content-section">
     <h2>Update Benchmark Scores</h2>
-    <h4>Please select <strong>Edit</strong> in the row you'd like to change and enter your updated benchmark values</h4>
+    <h4>Please select <strong>Edit</strong> in the row you'd like to change and enter your updated benchmark values. NOTE: If nothing is entered, the value will not be updated</h4>
+
+    <form action="{{ url_for('update_benchmarks') }}" method=post>
+    <div>
+
+            <!-- Benchmark ID  -->
+            <p>
+                {{ form.benchmarkIdNumber.label }} <br>
+                {{ form.benchmarkIdNumber(placeholder='Enter Benchmark ID') }}
+            </p>
+            <!-- Unigine -->
+            <p>
+                {{ form.unigine.label }} <br>
+                {{ form.unigine(placeholder='Enter score') }}
+            </p>
+            <!-- Passmark -->
+            <p>
+                {{ form.passmark.label }} <br>
+                {{ form.passmark(placeholder='Enter score') }}
+            </p>
+            <!-- Shadow of the tomb raider -->
+            <p>
+                {{ form.shadow.label }}<br>
+                {{form.shadow(placeholder='Enter avg FPS')}}
+            </p>
+            <!-- Gta -->
+            <p>
+                {{ form.gta.label }}<br>
+                {{ form.gta(placeholder='Enter avg FPS') }}
+            </p>
+            <!-- Submit button -->
+            <p>
+                {{ form.submit }}
+            </p>
+
+    </div>
+    </form>
 
     <table class="table table-striped">
       <thead>
@@ -12,6 +48,7 @@
           <th scope="col">Brand</th>
           <th scope="col">Graphics</th>
           <th scope="col">Average Price</th>
+          <th scope='col'>Benchmark ID</th>
           <th scope="col">Unigine Score</th>
           <th scope="col">Passmark Score</th>
           <th scope="col">Shadow of the Tomb Raider FPS</th>
@@ -25,6 +62,7 @@
             <td>{{item['brandName']}}</td>
             <td>{{item['graphicsCoprocessor']}}</td>
             <td>{{item['averagePrice']}}</td>
+            <td>{{item['id']}}</td>
             <td>{{item['unigineBenchmarkScore']}}</td>
             <td>{{item['passmarkBenchmarkScore']}}</td>
             <td>{{item['shadowOfTheTombRaiderFPS']}}</td>

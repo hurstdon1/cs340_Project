@@ -56,3 +56,11 @@ class gpuBrandForm(FlaskForm):
 	gpuIdNumber = SelectField(u"GPU ID Number", coerce=int)
 	brandIdNumber = SelectField(u"Brand ID Number", coerce=int)
 	submit = SubmitField("Submit")
+
+class updateBenchmarkForm(FlaskForm):
+	benchmarkIdNumber = SelectField(u"Benchmark ID Number", coerce=int)
+	unigine = IntegerField("Unigine score")
+	passmark = IntegerField("Passmark score")
+	shadow = IntegerField("Shadow of the Tomb Raider FPS")
+	gta = IntegerField("GTA 5 FPS")
+	submit = SubmitField("Submit")
