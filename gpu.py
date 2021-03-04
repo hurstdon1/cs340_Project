@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, json, redirect
-from forms import ContactForm, gpuForm, brandForm, chipsetForm, benchmarkForm, gpuBenchmarkForm, gpuBrandForm, searchForm, updateBenchmarkForm
+from forms import ContactForm, gpuForm, brandForm, chipsetForm, benchmarkForm, gpuBenchmarkForm, gpuBrandForm, searchForm, updateBenchmarkForm, gpuRemoveForm
 from flask import request
 from flask_wtf import FlaskForm
 from wtforms import TextField, BooleanField, TextAreaField, SubmitField
@@ -327,7 +327,6 @@ def add_gpu_brand():
 
 @app.route("/update_benchmarks", methods=["GET","POST"])
 def update_benchmarks():
-
 	# Benchmark query for a dynamic drop-down
 	benchmarkQuery = "SELECT * from benchmarkValues"
 	cursor = db.execute_query(db_connection=db_connection, query=benchmarkQuery)
@@ -335,12 +334,10 @@ def update_benchmarks():
 
 	# Create tuples for each thing in the db with the id and graphics coprocessor
 	benchmark_list = [(i["id"], i["id"]) for i in benchmarkResults]
+	form = updateBenchmarkForm()
+	form.benchmarkIdNumber.choices = benchmark_list
 
-        form = updateBenchmarkForm()
-
-        form.benchmarkIdNumber.choices = benchmark_list
-
-        query = """SELECT chipsetManufacturer, brandName, graphicsCoprocessor, averagePrice, benchmarkValues.id, unigineBenchmarkScore, passmarkBenchmarkScore, shadowOfTheTombRaiderFPS, grandTheftAuto5FPS 
+	query = """SELECT chipsetManufacturer, brandName, graphicsCoprocessor, averagePrice, benchmarkValues.id, unigineBenchmarkScore, passmarkBenchmarkScore, shadowOfTheTombRaiderFPS, grandTheftAuto5FPS 
 	 		FROM graphicsCards
 			INNER JOIN graphicsCard_brands ON graphicsCards.id = graphicsCard_brands.gpuId
 			INNER JOIN brands ON graphicsCard_brands.brandId = brands.id
@@ -351,31 +348,69 @@ def update_benchmarks():
 	newcursor = db.execute_query(db_connection=db_connection, query=query)
 
 	results = newcursor.fetchall()
+	if request.method =='POST':
+		benchmarkIdNumber = request.form["benchmarkIdNumber"]
+		unigine = request.form["unigine"]
+		passmark = request.form["passmark"]
+		shadow = request.form["shadow"]
+		gta = request.form["gta"]
+		res=pd.DataFrame({'benchmarkIdNumber':benchmarkIdNumber,'unigine':unigine, 'passmark':passmark, 'shadow':shadow, 'gta':gta}, index=[0])
+		res.to_csv('./update_benchmarks.csv')
+		print("The data are saved")
 
-        if request.method =='POST':
-        	benchmarkIdNumber = request.form["benchmarkIdNumber"]
-            	unigine = request.form["unigine"]
-            	passmark = request.form["passmark"]
-            	shadow = request.form["shadow"]
-            	gta = request.form["gta"]
-            	res=pd.DataFrame({'benchmarkIdNumber':benchmarkIdNumber,'unigine':unigine, 'passmark':passmark, 'shadow':shadow, 'gta':gta}, index=[0])
-            	res.to_csv('./update_benchmarks.csv')
-            	print("The data are saved")
-
-            	updateQuery = """UPDATE benchmarkValues 
-            	SET unigineBenchmarkScore={}, passmarkBenchmarkScore={},shadowOfTheTombRaiderFPS={}, grandTheftAuto5FPS={}
+		updateQuery = """UPDATE benchmarkValues 
+		SET unigineBenchmarkScore={}, passmarkBenchmarkScore={},shadowOfTheTombRaiderFPS={}, grandTheftAuto5FPS={}
             	WHERE id={}""".format(unigine, passmark, shadow, gta, benchmarkIdNumber)
 
-            	cursor = db.execute_query(db_connection=db_connection, query=updateQuery)
+		cursor = db.execute_query(db_connection=db_connection, query=updateQuery)
       
-            	return redirect(url_for('update_benchmarks'))
+		return redirect(url_for('update_benchmarks'))
+	else:
+		return render_template("update_benchmarks.html", form=form, title="Update Benchmarks", gpu=results)
 
-        else:
-                return render_template("update_benchmarks.html", form=form, title="Update Benchmarks", gpu=results)
-
-@app.route("/remove_gpu")
+@app.route("/remove_gpu", methods=["GET","POST"])
 def remove_gpu():
-        return render_template("remove_gpu.html", title="Remove GPU")
+	# Create a query for the gpu and run it to get all active chipsets in the DB
+	gpuQuery = "SELECT * from graphicsCards;"
+	cursor = db.execute_query(db_connection=db_connection, query=gpuQuery)
+	gpuResults = cursor.fetchall()
+
+	# Create tuples for each thing in the db with the id and graphics coprocessor
+	gpu_list = [(i["id"], i["id"]) for i in gpuResults]
+
+	form = gpuRemoveForm()
+
+	form.gpuIdNumber.choices = gpu_list
+
+	if  request.method =='POST':
+		gpuIdNumber = request.form["gpuIdNumber"]
+		res=pd.DataFrame({'gpuIdNumber': gpuIdNumber}, index=[0])
+		res.to_csv('./remove_gpu.csv')
+		print("The data are saved")
+
+		query = """DELETE FROM graphicsCards
+		WHERE {} = graphicsCards.id;""".format(gpuIdNumber)
+		
+		cursor = db.execute_query(db_connection=db_connection, query=query)
+		cursor.close()
+		cursor = db_connection.cursor()
+
+		query = """DELETE FROM graphicsCard_brands
+		WHERE {} = graphicsCard_brands.gpuId;""".format(gpuIdNumber)
+		cursor = db.execute_query(db_connection=db_connection, query=query)
+		cursor.close()
+		cursor = db_connection.cursor()
+		
+		query = """DELETE FROM graphicsCard_benchmarkValues
+		WHERE {} = graphicsCard_benchmarkValues.gpuID 
+		""".format(gpuIdNumber)
+
+		cursor = db.execute_query(db_connection=db_connection, query=query)
+
+		results = cursor.fetchall()
+		return(redirect(url_for('remove_gpu')))
+	else:
+        	return render_template("remove_gpu.html", form=form, title="Remove GPU")
 
 @app.route("/contact", methods=["GET","POST"])
 def contact():
@@ -395,6 +430,6 @@ def contact():
 		return render_template('contact.html', form=form)
 
 if __name__ == '__main__':
-        port = int(os.environ.get('PORT', 8993))
+        port = int(os.environ.get('PORT', 8994))
         app.run(port=port, debug=True)
 

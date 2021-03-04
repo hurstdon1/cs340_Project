@@ -64,3 +64,7 @@ class updateBenchmarkForm(FlaskForm):
 	shadow = IntegerField("Shadow of the Tomb Raider FPS")
 	gta = IntegerField("GTA 5 FPS")
 	submit = SubmitField("Submit")
+
+class gpuRemoveForm(FlaskForm):
+	gpuIdNumber = SelectField(u"GPU ID Number", coerce=int)
+	submit = SubmitField("Submit")

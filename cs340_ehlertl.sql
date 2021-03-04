@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 13, 2021 at 05:27 AM
+-- Generation Time: Mar 04, 2021 at 03:39 AM
 -- Server version: 10.4.17-MariaDB-log
 -- PHP Version: 7.4.13
 
@@ -276,93 +276,23 @@ ALTER TABLE `graphicsCards`
 -- Constraints for table `graphicsCards`
 --
 ALTER TABLE `graphicsCards`
-  ADD CONSTRAINT `graphicsCards_ibfk_2` FOREIGN KEY (`chipset`) REFERENCES `chipsets` (`id`);
+  ADD CONSTRAINT `graphicsCards_ibfk_2` FOREIGN KEY (`chipset`) REFERENCES `chipsets` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `graphicsCard_benchmarkValues`
 --
 ALTER TABLE `graphicsCard_benchmarkValues`
-  ADD CONSTRAINT `graphicsCard_benchmarkValues_ibfk_1` FOREIGN KEY (`gpuID`) REFERENCES `graphicsCards` (`id`),
-  ADD CONSTRAINT `graphicsCard_benchmarkValues_ibfk_2` FOREIGN KEY (`benchmarkId`) REFERENCES `benchmarkValues` (`id`);
+  ADD CONSTRAINT `graphicsCard_benchmarkValues_ibfk_1` FOREIGN KEY (`gpuID`) REFERENCES `graphicsCards` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `graphicsCard_benchmarkValues_ibfk_2` FOREIGN KEY (`benchmarkId`) REFERENCES `benchmarkValues` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `graphicsCard_brands`
 --
 ALTER TABLE `graphicsCard_brands`
-  ADD CONSTRAINT `graphicsCard_brands_ibfk_1` FOREIGN KEY (`gpuId`) REFERENCES `graphicsCards` (`id`),
-  ADD CONSTRAINT `graphicsCard_brands_ibfk_2` FOREIGN KEY (`brandId`) REFERENCES `brands` (`id`);
+  ADD CONSTRAINT `graphicsCard_brands_ibfk_1` FOREIGN KEY (`gpuId`) REFERENCES `graphicsCards` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `graphicsCard_brands_ibfk_2` FOREIGN KEY (`brandId`) REFERENCES `brands` (`id`) ON DELETE CASCADE;
 COMMIT;
 
-
-
--- -----------QUERIES BELOW-----------------------------------------------------
-
--- ------------------ Search GPUs -----------------------------------------------
-
-SELECT averagePrice, chipsetManufacturer, brandName, graphicsCoprocessor, unigineBenchmarkScore, passmarkBenchmarkScore, shadowOfTheTombRaiderFPS, grandTheftAuto5FPS
-FROM graphicsCards
-INNER JOIN graphicsCard_brands ON graphicsCards.id = graphicsCard_brands.gpuId
-INNER JOIN brands ON graphicsCard_brands.gpuId = brands.id
-INNER JOIN graphicsCard_benchmarkValues ON graphicsCards.id = graphicsCard_benchmarkValues.gpuID
-INNER JOIN benchmarkValues ON benchmarkValues.id = graphicsCard_benchmarkValues.benchmarkId
-INNER JOIN chipsets ON chipsets.id = graphicsCards.chipset
-WHERE chipsetManufacturer=:chipsetManufacturer, brandName=:brandName, graphicsCoprocessor=:graphicsCoprocessor, unigineBenchmarkScore=:unigineBenchmarkScore,
-passmarkBenchmarkScore=:passmarkBenchmarkScore, shadowOfTheTombRaiderFPS=:shadowOfTheTombRaiderFPS, grandTheftAuto5FPS
-
--- ------------------ Add new Graphics card -----------------------------------------------
-
-INSERT INTO graphicsCards (averagePrice, memoryType, numberOfCudaCores, chipset)
-VALUES (:averagePriceInput, :memoryTypeInput, :numberOfCudaCoresInput, :chipsetIdInput)
-
--- ------------------ Add new brand -----------------------------------------------
-
-INSERT INTO brands (brandName, productSeries, model)
-VALUES (:brandNameInput, :productSeriesInput, :modelInput)
-
--- ------------------ Add new chipset -----------------------------------------------
-
-INSERT INTO chipsets (chipsetManufacturer, graphicsCoprocessor)
-VALUES (:chipsetManufacturerInput, :graphicsCoprocessorInput)
-
--- ------------------ Add new benchmark -----------------------------------------------
-
-INSERT INTO benchmarkValues (unigineBenchmarkScore, passmarkBenchmarkScore, shadowOfTheTombRaiderFPS, grandTheftAuto5FPS)
-VALUES (:unigineBenchmarkScoreInput, :passmarkBenchmarkScoreInput, shadowOfTheTombRaiderFPSInput, grandTheftAuto5FPSInput)
-
--- ------------------ Add new average price -----------------------------------------------
-
-INSERT INTO averagePrice (averagePriceValue)
-VALUES (:averagePriceValueInput)
-
--- ------------------ Add a new GPU/Benchmark Relationship -----------------------------------------------
-
-INSERT INTO graphicsCard_benchmarkValues (gpuID, benchmarkID)
-VALUES (:gpuIDInput, :benchmarkIDInput)
-
--- ------------------ Add new GPU/Brand Relationship -----------------------------------------------
-
-INSERT INTO graphicsCard_brands (gpuID, brandID)
-VALUES (:gpuIDInput, :brandIDInput)
-
--- ------------------ Update Benchmark Scores -----------------------------------------------
-
-UPDATE benchmarkValues SET 
-unigineBenchmarkScore = :unigineBenchmarkScoreInput,
-passmarkBenchmarkScore = :passmarkBenchmarkScoreInput,
-shadowOfTheTombRaiderFPS = :shadowOfTheTombRaiderFPSInput,
-grandTheftAuto5FPS = :grandTheftAuto5FPSInput
-WHERE benchmarkID = :benchmarkID
-
--- ------------------ Delete a Graphics Card -----------------------------------------------
-
-DELETE FROM graphicsCards
-WHERE graphicsCards.id = :id
-
-DELETE FROM graphicsCard_brands
-WHERE :id = graphicsCard_brands.gpuId
-
-DELETE FROM graphicsCard_benchmarkValues
-WHERE :id = graphicsCard_benchmarkValues.gpuID
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
