@@ -15,29 +15,29 @@ class searchForm(FlaskForm):
 	submit = SubmitField("Submit")
 
 class ContactForm(FlaskForm):
-    name = TextField("Name")
-    email = TextField("Email")
-    subject = TextField("Subject")
+    name = TextField("Name", validators=[InputRequired()])
+    email = TextField("Email", validators=[InputRequired()])
+    subject = TextField("Subject", validators=[InputRequired()])
     message = TextAreaField("Message")
     submit = SubmitField("Send")
 
 class gpuForm(FlaskForm):
-	memoryType = TextField("Memory Type")
-	numberOfCudaCores = IntegerField("Number Of Cuda Cores")
-	chipsetId = SelectField(u"Chipset", coerce=int)
-	averagePrice = IntegerField("Average Price")
+	memoryType = TextField("Memory Type", validators=[InputRequired()])
+	numberOfCudaCores = IntegerField("Number Of Cuda Cores", validators=[InputRequired()])
+	chipsetId = SelectField(u"Chipset", coerce=int, validators=[InputRequired()])
+	averagePrice = IntegerField("Average Price", validators=[InputRequired()])
 	submit = SubmitField("Submit")
 
 
 class brandForm(FlaskForm):
-	brandName = TextField("Brand Name")
-	productSeries = TextField("Product Series")
-	model = TextField("Model Name")
+	brandName = TextField("Brand Name", validators=[InputRequired()])
+	productSeries = TextField("Product Series", validators=[InputRequired()])
+	model = TextField("Model Name", validators=[InputRequired()])
 	submit = SubmitField("Submit")
 
 class chipsetForm(FlaskForm):
-	chipsetManufacturer=TextField("Chipset Manufacturer")
-	graphicsCoprocessor = TextField("Graphics Coprocessor")
+	chipsetManufacturer=TextField("Chipset Manufacturer", validators=[InputRequired()])
+	graphicsCoprocessor = TextField("Graphics Coprocessor", validators=[InputRequired()])
 	submit = SubmitField("Submit")
 
 class benchmarkForm(FlaskForm):
@@ -48,13 +48,13 @@ class benchmarkForm(FlaskForm):
 	submit = SubmitField("Submit")
 
 class gpuBenchmarkForm(FlaskForm):
-	gpuIdNumber = SelectField(u"GPU ID Number", coerce=int)
-	benchmarkIdNumber = SelectField(u"Bechmark ID Number", coerce=int)
+	gpuIdNumber = SelectField(u"GPU ID Number", coerce=int, validators=[InputRequired()])
+	benchmarkIdNumber = SelectField(u"Bechmark ID Number", coerce=int, validators=[InputRequired()])
 	submit = SubmitField("Submit")
 
 class gpuBrandForm(FlaskForm):
-	gpuIdNumber = SelectField(u"GPU ID Number", coerce=int)
-	brandIdNumber = SelectField(u"Brand ID Number", coerce=int)
+	gpuIdNumber = SelectField(u"GPU ID Number", coerce=int, validators=[InputRequired()])
+	brandIdNumber = SelectField(u"Brand ID Number", coerce=int, validators=[InputRequired()])
 	submit = SubmitField("Submit")
 
 class updateBenchmarkForm(FlaskForm):

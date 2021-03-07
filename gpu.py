@@ -334,6 +334,7 @@ def update_benchmarks():
 
 	# Create tuples for each thing in the db with the id and graphics coprocessor
 	benchmark_list = [(i["id"], i["id"]) for i in benchmarkResults]
+	print(benchmark_list)
 	form = updateBenchmarkForm()
 	form.benchmarkIdNumber.choices = benchmark_list
 
@@ -358,9 +359,32 @@ def update_benchmarks():
 		res.to_csv('./update_benchmarks.csv')
 		print("The data are saved")
 
+		# Run a query to get the previous results in our target row and store them in variables
+		currentQuery = "SELECT unigineBenchmarkScore, passmarkBenchmarkScore, shadowOfTheTombRaiderFPS, grandTheftAuto5FPS FROM benchmarkValues WHERE id={}".format(benchmarkIdNumber)
+		cursor = db.execute_query(db_connection=db_connection, query=currentQuery)
+		results=cursor.fetchall()
+
+		prevUnigine = results[0]['unigineBenchmarkScore']
+		prevPass = results[0]['passmarkBenchmarkScore']
+		prevShadow = results[0]['shadowOfTheTombRaiderFPS']
+		prevGta = results[0]['grandTheftAuto5FPS']
+
+		# If no input was passed, use the same values that were already in the row
+		if unigine == "":
+			unigine = prevUnigine
+
+		if passmark == "":
+			passmark = prevPass
+
+		if shadow == "":
+			shadow = prevShadow
+
+		if gta == "":
+			gta = prevGta
+
 		updateQuery = """UPDATE benchmarkValues 
 		SET unigineBenchmarkScore={}, passmarkBenchmarkScore={},shadowOfTheTombRaiderFPS={}, grandTheftAuto5FPS={}
-            	WHERE id={}""".format(unigine, passmark, shadow, gta, benchmarkIdNumber)
+        WHERE id={}""".format(unigine, passmark, shadow, gta, benchmarkIdNumber)
 
 		cursor = db.execute_query(db_connection=db_connection, query=updateQuery)
       
