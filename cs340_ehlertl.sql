@@ -20,29 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `cs340_ehlertl`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `averagePrice`
---
-
-CREATE TABLE `averagePrice` (
-  `id` int(11) NOT NULL,
-  `averagePriceValue` decimal(65,0) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `averagePrice`
---
-
-INSERT INTO `averagePrice` (`id`, `averagePriceValue`) VALUES
-(1, '500'),
-(2, '600'),
-(3, '750'),
-(4, '900'),
-(5, '1750');
-
 -- --------------------------------------------------------
 
 --
@@ -185,14 +162,6 @@ INSERT INTO `graphicsCard_brands` (`gpuId`, `brandId`) VALUES
 (5, 5);
 
 --
--- Indexes for dumped tables
---
-
---
--- Indexes for table `averagePrice`
---
-ALTER TABLE `averagePrice`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `benchmarkValues`
@@ -239,10 +208,7 @@ ALTER TABLE `graphicsCard_brands`
 --
 
 --
--- AUTO_INCREMENT for table `averagePrice`
---
-ALTER TABLE `averagePrice`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
 
 --
 -- AUTO_INCREMENT for table `benchmarkValues`
