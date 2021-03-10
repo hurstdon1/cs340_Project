@@ -3,10 +3,6 @@
 
 	<div class="content-section">
 	<h2>Add a graphics card</h2>
-
-    {% if error %}
-    <p class=error><strong>Error:</strong> {{ error }}
-    {% endif %}
     
     <form action="{{ url_for('add_gpu') }}" method=post>
         <div>
@@ -29,7 +25,7 @@
              <!-- Average price -->
             <p>
                 {{ form.averagePrice.label }} <br>
-                {{ form.averagePrice(placeholder='Enter price') }}
+                {{ form.averagePrice(placeholder='Enter a price') }}
             </p>
 
             <!-- Submit button -->
