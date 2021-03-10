@@ -1,11 +1,14 @@
 from flask import Flask, render_template, url_for, json, redirect
 from forms import ContactForm, gpuForm, brandForm, chipsetForm, benchmarkForm, gpuBenchmarkForm, gpuBrandForm, searchForm, updateBenchmarkForm, gpuRemoveForm
-from flask import request
+from flask import request, flash
 from flask_wtf import FlaskForm
 from wtforms import TextField, BooleanField, TextAreaField, SubmitField
 import pandas as pd
 import os
 import database.db_connector as db
+
+# General Outline for this form was borrowed from the tutorial on gkochera's github
+# https://github.com/gkochera/CS340-demo-flask-app/blob/master/app.py
 
 app = Flask(__name__)
 
@@ -27,15 +30,19 @@ def comparisons():
 
 	form = searchForm()
 
+	# if the method is a post
 	if request.method == 'POST':
 
+		# Get the form data and store in variables
 		gpu = request.form["gpu"]
 		chipset = form.chipset.data
 		brand = form.brand.data
 		maxPrice = request.form["maxPrice"]
 
+		# set an empty query for GPU
 		gpuQuery = ""
 
+		# If gpu variable isn't an empty string, add query for graphicsCoprocessor
 		if gpu != "":
 			gpuQuery = "graphicsCoprocessor LIKE '%%{}%%' AND ".format(gpu)
 
@@ -100,7 +107,7 @@ def comparisons():
 		# Price query declaration
 		priceQuery = "averagePrice <= '{}';".format(maxPrice)
 
-
+		# Query to select all of the data we want for our table
 		query ="""SELECT chipsetManufacturer, brandName, graphicsCoprocessor, averagePrice, unigineBenchmarkScore, passmarkBenchmarkScore, shadowOfTheTombRaiderFPS, grandTheftAuto5FPS 
 	 		FROM graphicsCards
 			INNER JOIN graphicsCard_brands ON graphicsCards.id = graphicsCard_brands.gpuId
@@ -110,8 +117,8 @@ def comparisons():
 			INNER JOIN chipsets ON graphicsCards.chipset = chipsets.id
 			WHERE """ + gpuQuery + chipsetQuery + brandQuery + priceQuery
 
-			# """chipsetManufacturer = '{}' AND brandName = '{}' """
 
+		# Cursor/results/render is all boilerplate borrowed from gkochera github
 		cursor = db.execute_query(db_connection=db_connection, query=query)
 
 		results = cursor.fetchall()
@@ -128,6 +135,7 @@ def add():
 @app.route("/add_gpu", methods=["GET","POST"])
 def add_gpu():
 
+	error = None
 	# Create a query for the chipsets and run it to get all active chipsets in the DB
 	chipsetQuery = "SELECT * from chipsets;"
 	cursor = db.execute_query(db_connection=db_connection, query=chipsetQuery)
@@ -143,22 +151,33 @@ def add_gpu():
 
 	if request.method == 'POST':
 
-		memoryType = request.form["memoryType"]
-		numberOfCudaCores = request.form["numberOfCudaCores"]
-		chipsetId = request.form["chipsetId"]
-		averagePrice = request.form["averagePrice"]
-		res = pd.DataFrame({'memoryType':memoryType, 'numberOfCudaCores':numberOfCudaCores, 'chipsetId':chipsetId, 'averagePrice':averagePrice}, index=[0])
-		res.to_csv('./add_gpu.csv')
-		print("The data are saved")
+		if form.validate_on_submit():
+			# Storing values from form in variables
+			memoryType = request.form["memoryType"]
+			numberOfCudaCores = request.form["numberOfCudaCores"]
+			chipsetId = request.form["chipsetId"]
+			averagePrice = request.form["averagePrice"]
 
-		query = """INSERT INTO graphicsCards(memoryType, numberOfCudaCores, chipset, averagePrice)
-		Values ('{}','{}','{}','{}')""".format(memoryType, numberOfCudaCores, chipsetId, averagePrice)
+			# this code is used to create a datafrane abd store the data in a csv file. This plain text file just stores the data that was entered in the query
+			res = pd.DataFrame({'memoryType':memoryType, 'numberOfCudaCores':numberOfCudaCores, 'chipsetId':chipsetId, 'averagePrice':averagePrice}, index=[0])
+			res.to_csv('./add_gpu.csv')
+			print("The data are saved")
 
-		cursor = db.execute_query(db_connection=db_connection, query=query)
+			# Query to insert our form data values as data for a new graphics card
+			query = """INSERT INTO graphicsCards(memoryType, numberOfCudaCores, chipset, averagePrice)
+			Values ('{}','{}','{}','{}')""".format(memoryType, numberOfCudaCores, chipsetId, averagePrice)
 
-		results = cursor.fetchall()
+			cursor = db.execute_query(db_connection=db_connection, query=query)
 
-		return(redirect(url_for('add_gpu')))
+			results = cursor.fetchall()
+
+			# The redirect is used to bring the user back to a page with blank forms upon submitting
+			return(redirect(url_for('add_gpu')))
+
+		else:
+			flash('Validation failed, please check your inputs')
+			error='Invalid Data used'
+			return(redirect(url_for('add_gpu')))
 
 	else:
 		return render_template("add_gpu.html", form=form, title="Add a gpu")
@@ -194,12 +213,15 @@ def add_chipset():
 	form = chipsetForm()
 
 	if request.method == 'POST':
+
+		# Storing values from form in variables
 		chipsetManufacturer = request.form["chipsetManufacturer"]
 		graphicsCoprocessor = request.form["graphicsCoprocessor"]
 		res = pd.DataFrame({'chipsetManufacturer':chipsetManufacturer, 'graphicsCoprocessor':graphicsCoprocessor}, index=[0])
 		res.to_csv('./add_chipset.csv')
 		print("The data are saved")
 
+		# Query to insert our form data values as data for a new chipset
 		query = """INSERT INTO chipsets (chipsetManufacturer, graphicsCoprocessor)
 		VALUES ('{}','{}')""".format(chipsetManufacturer, graphicsCoprocessor)
 

@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import TextField, BooleanField, TextAreaField, SubmitField, IntegerField, SelectField, SelectMultipleField, widgets, validators
-from wtforms.validators import InputRequired
+from wtforms.validators import InputRequired, NumberRange, Email
+
+# General template for flask forms was borrowed from https://hackersandslackers.com/flask-wtforms-forms/
 
 # This Multicheckbox field was borrowed from https://gist.github.com/llloo/d4b12ca9e98723e5f523573058a8c0c6
 class MultiCheckboxField(SelectMultipleField):
@@ -17,15 +19,15 @@ class searchForm(FlaskForm):
 class ContactForm(FlaskForm):
     name = TextField("Name", validators=[InputRequired()])
     email = TextField("Email", validators=[InputRequired()])
-    subject = TextField("Subject", validators=[InputRequired()])
+    subject = TextField("Subject", validators=[InputRequired(), Email()])
     message = TextAreaField("Message")
     submit = SubmitField("Send")
 
 class gpuForm(FlaskForm):
 	memoryType = TextField("Memory Type", validators=[InputRequired()])
-	numberOfCudaCores = IntegerField("Number Of Cuda Cores", validators=[InputRequired()])
+	numberOfCudaCores = IntegerField("Number Of Cuda Cores", validators=[InputRequired(), NumberRange(min=0, max=9999, message='Please enter a value between 0 and 9999')])
 	chipsetId = SelectField(u"Chipset", coerce=int, validators=[InputRequired()])
-	averagePrice = IntegerField("Average Price", validators=[InputRequired()])
+	averagePrice = IntegerField("Average Price", validators=[InputRequired(), NumberRange(min=0, max=9999, message='Please enter a value between 0 and 9999')])
 	submit = SubmitField("Submit")
 
 
