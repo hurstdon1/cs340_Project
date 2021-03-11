@@ -7,6 +7,7 @@ import pandas as pd
 import os
 import database.db_connector as db
 
+# The following code was borrowed directly from George Kochera's tutorial: https://github.com/gkochera/CS340-demo-flask-app/blob/master/app.py
 app = Flask(__name__)
 
 db_connection = db.connect_to_database()
@@ -150,6 +151,9 @@ def add_gpu():
 		numberOfCudaCores = request.form["numberOfCudaCores"]
 		chipsetId = request.form["chipsetId"]
 		averagePrice = request.form["averagePrice"]
+
+		# Pandas information borrowed from https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html
+		# We are using this to store data in a comma separated value file for future reference
 		res = pd.DataFrame({'memoryType':memoryType, 'numberOfCudaCores':numberOfCudaCores, 'chipsetId':chipsetId, 'averagePrice':averagePrice}, index=[0])
 		res.to_csv('./add_gpu.csv')
 		print("The data are saved")
@@ -157,6 +161,7 @@ def add_gpu():
 		query = """INSERT INTO graphicsCards(memoryType, numberOfCudaCores, chipset, averagePrice)
 		Values ('{}','{}','{}','{}')""".format(memoryType, numberOfCudaCores, chipsetId, averagePrice)
 
+		# Cursor/results are both borrowed from the flask app tutorial: https://github.com/gkochera/CS340-demo-flask-app/blob/master/app.py
 		cursor = db.execute_query(db_connection=db_connection, query=query)
 
 		results = cursor.fetchall()

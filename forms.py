@@ -3,6 +3,7 @@ from wtforms import TextField, BooleanField, TextAreaField, SubmitField, Integer
 from wtforms.validators import InputRequired
 
 # This Multicheckbox field was borrowed from https://gist.github.com/llloo/d4b12ca9e98723e5f523573058a8c0c6
+# This class works to give checkbox widgets that the user can select to make choices for the search
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)
     option_widget = widgets.CheckboxInput()
