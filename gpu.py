@@ -25,6 +25,7 @@ def about():
 @app.route("/comparisons", methods=["GET","POST"])
 def comparisons():
 
+	db_connection = db.connect_to_database()
 	form = searchForm()
 
 	if request.method == 'POST':
@@ -128,6 +129,8 @@ def add():
 @app.route("/add_gpu", methods=["GET","POST"])
 def add_gpu():
 
+	db_connection = db.connect_to_database()
+
 	# Create a query for the chipsets and run it to get all active chipsets in the DB
 	chipsetQuery = "SELECT * from chipsets;"
 	cursor = db.execute_query(db_connection=db_connection, query=chipsetQuery)
@@ -166,6 +169,8 @@ def add_gpu():
 @app.route("/add_brand", methods=["GET","POST"])
 def add_brand():
 
+	db_connection = db.connect_to_database()
+
 	form = brandForm()
 
 	if request.method == 'POST':
@@ -191,6 +196,8 @@ def add_brand():
 @app.route("/add_chipset", methods=["GET","POST"])
 def add_chipset():
 
+	db_connection = db.connect_to_database()
+
 	form = chipsetForm()
 
 	if request.method == 'POST':
@@ -214,6 +221,8 @@ def add_chipset():
 
 @app.route("/add_benchmarks", methods=["GET","POST"])
 def add_benchmarks():
+
+	db_connection = db.connect_to_database()
 
 	form = benchmarkForm()
 	
@@ -240,6 +249,8 @@ def add_benchmarks():
 
 @app.route("/add_gpu_benchmarks", methods=["GET","POST"])
 def add_gpu_benchmarks():
+
+	db_connection = db.connect_to_database()
 
 	# Create a query for the gpu and run it to get all active chipsets in the DB
 	gpuQuery = "SELECT * from graphicsCards;"
@@ -284,6 +295,8 @@ def add_gpu_benchmarks():
 @app.route("/add_gpu_brand", methods=["GET","POST"])
 def add_gpu_brand():
 
+	db_connection = db.connect_to_database()
+
 	# Create a query for the gpu and run it to get all active chipsets in the DB
 	gpuQuery = "SELECT * from graphicsCards;"
 	cursor = db.execute_query(db_connection=db_connection, query=gpuQuery)
@@ -327,6 +340,9 @@ def add_gpu_brand():
 
 @app.route("/update_benchmarks", methods=["GET","POST"])
 def update_benchmarks():
+
+	db_connection = db.connect_to_database()
+
 	# Benchmark query for a dynamic drop-down
 	benchmarkQuery = "SELECT * from benchmarkValues"
 	cursor = db.execute_query(db_connection=db_connection, query=benchmarkQuery)
@@ -394,6 +410,9 @@ def update_benchmarks():
 
 @app.route("/remove_gpu", methods=["GET","POST"])
 def remove_gpu():
+
+	db_connection = db.connect_to_database()
+
 	# Create a query for the gpu and run it to get all active chipsets in the DB
 	gpuQuery = "SELECT * from graphicsCards;"
 	cursor = db.execute_query(db_connection=db_connection, query=gpuQuery)
@@ -438,6 +457,8 @@ def remove_gpu():
 
 @app.route("/contact", methods=["GET","POST"])
 def contact():
+	
+	db_connection = db.connect_to_database()
 
 	form = ContactForm()
 
