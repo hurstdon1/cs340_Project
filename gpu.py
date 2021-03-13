@@ -286,6 +286,11 @@ def add_benchmarks():
 
 	db_connection = db.connect_to_database()
 
+	# Benchmark query for a dynamic drop-down
+	benchmarkQuery = "SELECT * from benchmarkValues"
+	cursor = db.execute_query(db_connection=db_connection, query=benchmarkQuery)
+	results = cursor.fetchall()
+
 	form = benchmarkForm()
 	
 	if request.method =='POST':
@@ -321,7 +326,7 @@ def add_benchmarks():
 		return(redirect(url_for('add_benchmarks')))
 
 	else:
-		return render_template("add_benchmarks.html", form=form, title="Add Benchmarks")
+		return render_template("add_benchmarks.html", form=form, title="Add Benchmarks", gpu=results)
 
 @app.route("/add_gpu_benchmarks", methods=["GET","POST"])
 def add_gpu_benchmarks():
@@ -426,7 +431,6 @@ def update_benchmarks():
 
 	# Create tuples for each thing in the db with the id and graphics coprocessor
 	benchmark_list = [(i["id"], i["id"]) for i in benchmarkResults]
-	print(benchmark_list)
 	form = updateBenchmarkForm()
 	form.benchmarkIdNumber.choices = benchmark_list
 

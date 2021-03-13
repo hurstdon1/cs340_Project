@@ -33,6 +33,29 @@
             </p>
         </div>
     </form>
+
+        <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope='col'>Benchmark ID</th>
+          <th scope="col">Unigine Score</th>
+          <th scope="col">Passmark Score</th>
+          <th scope="col">Shadow of the Tomb Raider FPS</th>
+          <th scope="col">GTA 5 FPS</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in gpu %}
+        <tr>
+            <td>{{item['id']}}</td>
+            <td>{{item['unigineBenchmarkScore']}}</td>
+            <td>{{item['passmarkBenchmarkScore']}}</td>
+            <td>{{item['shadowOfTheTombRaiderFPS']}}</td>
+            <td>{{item['grandTheftAuto5FPS']}}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
 </div>
 
 {% endblock content %}

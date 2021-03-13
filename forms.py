@@ -11,7 +11,7 @@ class MultiCheckboxField(SelectMultipleField):
 class searchForm(FlaskForm):
 	gpu = TextField("Graphics Card")
 	chipset = MultiCheckboxField(u'Chipset',choices = [('Nvidia', 'Nvidia'), ('AMD', 'AMD')], validators=[InputRequired()], default=['Nvidia'])
-	brand = MultiCheckboxField(u'Brand', choices = [('AMD', 'AMD'), ('ASUS', 'ASUS'), ('EVGA', 'EVGA'), ('Gigabyte', 'Gigabyte'), ('MSI', 'MSI'), ('NVIDIA', 'NVIDIA'), ('Power VR', 'Power VR'), ('Sapphire', 'Sapphire'), ('Via', 'Via'), ('Zotac', 'Zotac') ], validators=[InputRequired()], default=['ASUS'])
+	brand = MultiCheckboxField(u'Brand', choices = [('AMD', 'AMD'), ('ASUS', 'ASUS'), ('EVGA', 'EVGA'), ('Gigabyte', 'Gigabyte'), ('MSI', 'MSI'), ('NVIDIA', 'NVIDIA'), ('Power VR', 'Power VR'), ('Sapphire', 'Sapphire'), ('Via', 'Via'), ('Zotac', 'Zotac')], validators=[InputRequired()], default=['ASUS'])
 	maxPrice = IntegerField("Maximum Price")
 	submit = SubmitField("Submit")
 
@@ -32,13 +32,13 @@ class gpuForm(FlaskForm):
 
 
 class brandForm(FlaskForm):
-	brandName = TextField("Brand Name", validators=[InputRequired()])
+	brandName = SelectField("Brand Name", choices = [('AMD', 'AMD'), ('ASUS', 'ASUS'), ('EVGA', 'EVGA'), ('Gigabyte', 'Gigabyte'), ('MSI', 'MSI'), ('NVIDIA', 'NVIDIA'), ('Power VR', 'Power VR'), ('Sapphire', 'Sapphire'), ('Via', 'Via'), ('Zotac', 'Zotac')], validators=[InputRequired()])
 	productSeries = TextField("Product Series", validators=[InputRequired()])
 	model = TextField("Model Name", validators=[InputRequired()])
 	submit = SubmitField("Submit")
 
 class chipsetForm(FlaskForm):
-	chipsetManufacturer=TextField("Chipset Manufacturer", validators=[InputRequired()])
+	chipsetManufacturer=SelectField("Chipset Manufacturer", choices = [('Nvidia', 'Nvidia'), ('AMD', 'AMD')], validators=[InputRequired()])
 	graphicsCoprocessor = TextField("Graphics Coprocessor", validators=[InputRequired()])
 	submit = SubmitField("Submit")
 
