@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, json, redirect
-from forms import ContactForm, gpuForm, brandForm, chipsetForm, benchmarkForm, gpuBenchmarkForm, gpuBrandForm, searchForm, updateBenchmarkForm, gpuRemoveForm
+from forms import ContactForm, gpuForm, brandForm, chipsetForm, benchmarkForm, gpuBenchmarkForm, gpuBrandForm, searchForm, updateBenchmarkForm, gpuRemoveForm, outputForm
 from flask import request
 from flask_wtf import FlaskForm
 from wtforms import TextField, BooleanField, TextAreaField, SubmitField
@@ -140,30 +140,43 @@ def add_gpu():
 	# Create tuples for each thing in the db with the id and graphics coprocessor
 	chipset_list = [(i["id"], i["graphicsCoprocessor"]) for i in chipsetResults]
 
+	outputQuery = "SELECT * from outputs;"
+	cursor = db.execute_query(db_connection=db_connection, query=outputQuery)
+	outputResults = cursor.fetchall()
+
+	print(outputResults)
+
+	# Create tuples for each thing in the db with the id 
+	output_list = [(i["id"], i["id"]) for i in outputResults]
+
+	print("Output LIST")
+	print(output_list)
+
 	form = gpuForm()
 
 	# fill the form the with chipset choices from the list
 	form.chipsetId.choices = chipset_list
+	form.outputId.choices = output_list
 
 	if request.method == 'POST':
 
 		memoryType = request.form["memoryType"]
 		numberOfCudaCores = request.form["numberOfCudaCores"]
 		chipsetId = request.form["chipsetId"]
+		outputId = request.form["outputId"]
 		averagePrice = request.form["averagePrice"]
 
 		# Pandas information borrowed from https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html
 		# We are using this to store data in a comma separated value file for future reference
-		res = pd.DataFrame({'memoryType':memoryType, 'numberOfCudaCores':numberOfCudaCores, 'chipsetId':chipsetId, 'averagePrice':averagePrice}, index=[0])
+		res = pd.DataFrame({'memoryType':memoryType, 'numberOfCudaCores':numberOfCudaCores, 'chipsetId':chipsetId, 'outputId': outputId, 'averagePrice':averagePrice}, index=[0])
 		res.to_csv('./add_gpu.csv')
 		print("The data are saved")
 
-		query = """INSERT INTO graphicsCards(memoryType, numberOfCudaCores, chipset, averagePrice)
-		Values ('{}','{}','{}','{}')""".format(memoryType, numberOfCudaCores, chipsetId, averagePrice)
+		query = """INSERT INTO graphicsCards(memoryType, numberOfCudaCores, chipset, outputs, averagePrice)
+		Values ('{}','{}','{}','{}', '{}')""".format(memoryType, numberOfCudaCores, chipsetId, outputId, averagePrice)
 
 		# Cursor/results are both borrowed from the flask app tutorial: https://github.com/gkochera/CS340-demo-flask-app/blob/master/app.py
 		cursor = db.execute_query(db_connection=db_connection, query=query)
-
 		results = cursor.fetchall()
 
 		return(redirect(url_for('add_gpu')))
@@ -224,6 +237,50 @@ def add_chipset():
 	else:
 		return render_template("add_chipset.html", form=form, title="Add a chipset")
 
+@app.route("/add_output", methods=["GET", "POST"])
+def add_output():
+
+	db_connection = db.connect_to_database()
+
+	outputQuery = "SELECT * from outputs"
+	cursor = db.execute_query(db_connection=db_connection, query=outputQuery)
+	results = cursor.fetchall()
+
+	form = outputForm()
+
+	if request.method == 'POST':
+
+		displayPort = request.form["displayPort"]
+		hdmi = request.form["hdmi"]
+		vga = request.form["vga"]
+		dvi = request.form["dvi"]
+		res = pd.DataFrame({'displayPort':displayPort , 'hdmi':hdmi, 'vga':vga, 'dvi':dvi}, index=[0])
+		res.to_csv('./add_output.csv')
+		print("The data are saved")
+
+		if displayPort == "":
+			displayPort = 0
+		if hdmi == "":
+			hdmi = 0
+		if vga == "":
+			vga = 0
+		if dvi == "":
+			dvi = 0
+
+
+		query = """INSERT INTO outputs (displayPort, hdmi, vga, dvi)
+		VALUES (""" + displayPort + "," + hdmi + "," + vga + "," + dvi +")"
+
+		cursor = db.execute_query(db_connection=db_connection, query=query)
+
+		results = cursor.fetchall()
+
+		return(redirect(url_for('add_output')))
+
+	else:
+		return render_template("add_output.html", form=form, title="Add outputs", gpu=results)
+
+
 @app.route("/add_benchmarks", methods=["GET","POST"])
 def add_benchmarks():
 
@@ -239,6 +296,20 @@ def add_benchmarks():
 		res=pd.DataFrame({'unigine':unigine, 'passmark':passmark, 'shadow':shadow, 'gta':gta}, index=[0])
 		res.to_csv('./add_benchmarks.csv')
 		print("The data are saved")
+
+		if unigine == "":
+			unigine = 'NULL';
+
+		if passmark == "":
+			passmark = "NULL"
+
+		if shadow == "":
+			shadow = "NULL"
+
+		if gta == "":
+			gta = "NULL"
+
+
 
 		query = """INSERT INTO benchmarkValues (unigineBenchmarkScore, passmarkBenchmarkScore, shadowOfTheTombRaiderFPS, grandTheftAuto5FPS)
 		VALUES (""" + unigine + "," + passmark + "," + shadow + "," + gta +")"

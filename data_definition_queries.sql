@@ -28,10 +28,10 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `benchmarkValues` (
   `id` int(11) NOT NULL,
-  `unigineBenchmarkScore` int(11) NOT NULL,
-  `passmarkBenchmarkScore` int(11) NOT NULL,
-  `shadowOfTheTombRaiderFPS` int(11) NOT NULL,
-  `grandTheftAuto5FPS` int(11) NOT NULL
+  `unigineBenchmarkScore` int(11),
+  `passmarkBenchmarkScore` int(11),
+  `shadowOfTheTombRaiderFPS` int(11),
+  `grandTheftAuto5FPS` int(11)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -57,6 +57,8 @@ CREATE TABLE `brands` (
   `productSeries` varchar(255) NOT NULL,
   `model` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 
 --
 -- Dumping data for table `brands`
@@ -95,15 +97,37 @@ INSERT INTO `chipsets` (`id`, `chipsetManufacturer`, `graphicsCoprocessor`) VALU
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `outputs`
+--
+
+CREATE TABLE `outputs` (
+  `id` int(11) NOT NULL,
+  `displayPort` int(11),
+  `hdmi` int(11), 
+  `vga` int(11),
+  `dvi` int(11)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `outputs` (`id`, `displayPort`, `hdmi`, `vga`, `dvi`) VALUES
+(1, 3, 1, 0, 0),
+(2, 2, 2, 0, 0),
+(3, 1, 3, 0, 0),
+(4, 0, 0, 2, 0),
+(5, 0, 0, 1, 1);
+
+--
 -- Table structure for table `graphicsCards`
 --
+
+-- --------------------------------------------------------
 
 CREATE TABLE `graphicsCards` (
   `id` int(11) NOT NULL,
   `averagePrice` int(11) NOT NULL,
   `memoryType` varchar(255) NOT NULL,
   `numberOfCudaCores` int(11) NOT NULL,
-  `chipset` int(11) NOT NULL
+  `chipset` int(11) NOT NULL,
+  `outputs` int(11)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -125,7 +149,7 @@ INSERT INTO `graphicsCards` (`id`, `averagePrice`, `memoryType`, `numberOfCudaCo
 
 CREATE TABLE `graphicsCard_benchmarkValues` (
   `gpuID` int(11) NOT NULL,
-  `benchmarkId` int(11) NOT NULL
+  `benchmarkId` int(11) NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -176,6 +200,12 @@ ALTER TABLE `brands`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `outputs`
+--
+ALTER TABLE `outputs`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `chipsets`
 --
 ALTER TABLE `chipsets`
@@ -187,7 +217,8 @@ ALTER TABLE `chipsets`
 ALTER TABLE `graphicsCards`
   ADD PRIMARY KEY (`id`),
   ADD KEY `averagePrice` (`averagePrice`),
-  ADD KEY `chipset` (`chipset`);
+  ADD KEY `chipset` (`chipset`),
+  ADD KEY `outputs` (`outputs`);
 
 --
 -- Indexes for table `graphicsCard_benchmarkValues`
@@ -223,6 +254,12 @@ ALTER TABLE `brands`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `outputs`
+--
+ALTER TABLE `outputs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `chipsets`
 --
 ALTER TABLE `chipsets`
@@ -242,6 +279,7 @@ ALTER TABLE `graphicsCards`
 -- Constraints for table `graphicsCards`
 --
 ALTER TABLE `graphicsCards`
+  ADD CONSTRAINT `graphicsCards_ibfk_1` FOREIGN KEY (`outputs`) REFERENCES `outputs` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `graphicsCards_ibfk_2` FOREIGN KEY (`chipset`) REFERENCES `chipsets` (`id`) ON DELETE CASCADE;
 
 --

@@ -1,2 +1,2 @@
-,averagePrice,chipsetId,memoryType,numberOfCudaCores
-0,123,1,DDR5,100
+,averagePrice,chipsetId,memoryType,numberOfCudaCores,outputId
+0,1234,4,DDR8,123,4

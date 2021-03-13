@@ -25,15 +25,15 @@ VALUES (:brandNameInput, :productSeriesInput, :modelInput)
 INSERT INTO chipsets (chipsetManufacturer, graphicsCoprocessor)
 VALUES (:chipsetManufacturerInput, :graphicsCoprocessorInput)
 
+-- ------------------ Add new outputs -----------------------------------------------
+
+INSERT INTO outputs (displayPort, hdmi, vga, dvi)
+VALUES (:displayPort, :hdmi, :vga, :dvi)
+
 -- ------------------ Add new benchmark -----------------------------------------------
 
 INSERT INTO benchmarkValues (unigineBenchmarkScore, passmarkBenchmarkScore, shadowOfTheTombRaiderFPS, grandTheftAuto5FPS)
 VALUES (:unigineBenchmarkScoreInput, :passmarkBenchmarkScoreInput, shadowOfTheTombRaiderFPSInput, grandTheftAuto5FPSInput)
-
--- ------------------ Add new average price -----------------------------------------------
-
-INSERT INTO averagePrice (averagePriceValue)
-VALUES (:averagePriceValueInput)
 
 -- ------------------ Add a new GPU/Benchmark Relationship -----------------------------------------------
 

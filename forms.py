@@ -26,6 +26,7 @@ class gpuForm(FlaskForm):
 	memoryType = TextField("Memory Type", validators=[InputRequired()])
 	numberOfCudaCores = IntegerField("Number Of Cuda Cores", validators=[InputRequired()])
 	chipsetId = SelectField(u"Chipset", coerce=int, validators=[InputRequired()])
+	outputId = SelectField(u"Output id", coerce=int, validators=[InputRequired()])
 	averagePrice = IntegerField("Average Price", validators=[InputRequired()])
 	submit = SubmitField("Submit")
 
@@ -39,6 +40,13 @@ class brandForm(FlaskForm):
 class chipsetForm(FlaskForm):
 	chipsetManufacturer=TextField("Chipset Manufacturer", validators=[InputRequired()])
 	graphicsCoprocessor = TextField("Graphics Coprocessor", validators=[InputRequired()])
+	submit = SubmitField("Submit")
+
+class outputForm(FlaskForm):
+	displayPort = IntegerField("displayPort")
+	hdmi = IntegerField("hdmi")
+	vga = IntegerField("vga")
+	dvi = IntegerField('dvi')
 	submit = SubmitField("Submit")
 
 class benchmarkForm(FlaskForm):
