@@ -43,10 +43,10 @@ class chipsetForm(FlaskForm):
 	submit = SubmitField("Submit")
 
 class outputForm(FlaskForm):
-	displayPort = IntegerField("displayPort")
-	hdmi = IntegerField("hdmi")
-	vga = IntegerField("vga")
-	dvi = IntegerField('dvi')
+	displayPort = IntegerField("displayPort", validators=[InputRequired()])
+	hdmi = IntegerField("hdmi", validators=[InputRequired()])
+	vga = IntegerField("vga", validators=[InputRequired()])
+	dvi = IntegerField('dvi', validators=[InputRequired()])
 	submit = SubmitField("Submit")
 
 class benchmarkForm(FlaskForm):
