@@ -103,13 +103,14 @@ def comparisons():
 		priceQuery = "averagePrice <= '{}';".format(maxPrice)
 
 
-		query ="""SELECT chipsetManufacturer, brandName, graphicsCoprocessor, averagePrice, unigineBenchmarkScore, passmarkBenchmarkScore, shadowOfTheTombRaiderFPS, grandTheftAuto5FPS 
+		query ="""SELECT chipsetManufacturer, brandName, graphicsCoprocessor, averagePrice, unigineBenchmarkScore, passmarkBenchmarkScore, shadowOfTheTombRaiderFPS, grandTheftAuto5FPS, displayPort, hdmi, vga, dvi
 	 		FROM graphicsCards
 			INNER JOIN graphicsCard_brands ON graphicsCards.id = graphicsCard_brands.gpuId
 			INNER JOIN brands ON graphicsCard_brands.brandId = brands.id
 			INNER JOIN graphicsCard_benchmarkValues ON graphicsCards.id = graphicsCard_benchmarkValues.gpuID
 			INNER JOIN benchmarkValues ON benchmarkValues.id = graphicsCard_benchmarkValues.benchmarkId
 			INNER JOIN chipsets ON graphicsCards.chipset = chipsets.id
+			INNER JOIN outputs ON graphicsCards.outputs = outputs.id
 			WHERE """ + gpuQuery + chipsetQuery + brandQuery + priceQuery
 
 			# """chipsetManufacturer = '{}' AND brandName = '{}' """
@@ -117,6 +118,8 @@ def comparisons():
 		cursor = db.execute_query(db_connection=db_connection, query=query)
 
 		results = cursor.fetchall()
+
+		print(results)
 
 		return render_template('comparisons.html', title='Comparisons', gpu=results, form=form)
 

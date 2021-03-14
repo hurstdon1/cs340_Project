@@ -134,12 +134,12 @@ CREATE TABLE `graphicsCards` (
 -- Dumping data for table `graphicsCards`
 --
 
-INSERT INTO `graphicsCards` (`id`, `averagePrice`, `memoryType`, `numberOfCudaCores`, `chipset`) VALUES
-(1, 1, 'DDR6', 1408, 1),
-(2, 2, 'DDR6', 4864, 2),
-(3, 3, 'DDR6', 5888, 3),
-(4, 4, 'DDR6X', 8704, 4),
-(5, 5, 'DDR6X', 10496, 5);
+INSERT INTO `graphicsCards` (`id`, `averagePrice`, `memoryType`, `numberOfCudaCores`, `chipset`, `outputs`) VALUES
+(1, 1, 'DDR6', 1408, 1, 1),
+(2, 2, 'DDR6', 4864, 2, 2),
+(3, 3, 'DDR6', 5888, 3, 3),
+(4, 4, 'DDR6X', 8704, 4, 4),
+(5, 5, 'DDR6X', 10496, 5, 5);
 
 -- --------------------------------------------------------
 
@@ -216,7 +216,6 @@ ALTER TABLE `chipsets`
 --
 ALTER TABLE `graphicsCards`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `averagePrice` (`averagePrice`),
   ADD KEY `chipset` (`chipset`),
   ADD KEY `outputs` (`outputs`);
 
