@@ -536,7 +536,7 @@ def remove_gpu():
 		results = cursor.fetchall()
 		return(redirect(url_for('remove_gpu')))
 	else:
-        	return render_template("remove_gpu.html", form=form, title="Remove GPU")
+        	return render_template("remove_gpu.html", form=form, title="Remove GPU", gpu=gpuResults)
 
 @app.route("/contact", methods=["GET","POST"])
 def contact():

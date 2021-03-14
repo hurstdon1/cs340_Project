@@ -19,6 +19,31 @@
 
     	</div>
    </form>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope='col'>GPU ID</th>
+          <th scope="col">Average Price</th>
+          <th scope="col">Memory Type</th>
+          <th scope="col">Cuda Cores</th>
+          <th scope="col">Chipset Id</th>
+          <th scope="col">Outputs</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in gpu %}
+        <tr>
+            <td>{{item['id']}}</td>
+            <td>{{item['averagePrice']}}</td>
+            <td>{{item['memoryType']}}</td>
+            <td>{{item['numberOfCudaCores']}}</td>
+            <td>{{item['chipset']}}</td>
+            <td>{{item['outputs']}}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
 </div>
 
 {% endblock content %}
